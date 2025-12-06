@@ -1,0 +1,443 @@
+:root {
+  /* Paleta inspirada no REDS */
+  --bg-page: #ffffff;
+  --bg-surface: #ffffff;
+
+  --border-subtle: #aab7d7;
+  --border-strong: #aab7d7;
+
+  --text-main: #111827;
+  --text-muted: #4b5563;
+
+  --primary: #6f88bc;        /* azul do topo */
+  --primary-darker: #3f547f; /* azul do menu/lateral */
+  --pill-bg: #d8e1f5;        /* azul claro da caixa */
+
+  --radius-lg: 16px;
+  --shadow-card: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Source Sans Pro", system-ui, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-main);
+}
+
+/* Layout geral */
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+
+.topbar {
+  background: var(--primary);
+  border-bottom: 1px solid var(--border-strong);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  color: #ffffff;
+}
+
+/* Logo */
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #ffffff;
+  border-radius: 999px;
+}
+
+.logo-text-main {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: var(--primary-darker);
+}
+
+.logo-bracket-left,
+.logo-bracket-right {
+  width: 6px;
+  height: 16px;
+  border-radius: 999px;
+  background: #f7941d; /* laranja do ícone de ajuda */
+}
+
+.logo-texts {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #e5e7eb;
+}
+
+.logo-subtitle {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #d1d5db;
+}
+
+/* Relógio */
+
+.clock-wrapper {
+  text-align: right;
+}
+
+.clock-time {
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+}
+
+.clock-date {
+  font-size: 12px;
+  font-weight: 500;
+  color: #e5e7eb;
+}
+
+/* Main */
+
+.main {
+  flex: 1;
+}
+
+.main-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 24px 32px;
+}
+
+/* Page header – caixa em estilo REDS */
+
+.page-header {
+  background: var(--pill-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.page-header h1 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+/* Filtros + busca */
+
+.filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filters-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  border: 1px solid var(--border-subtle);
+  outline: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: #ffffff;
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pill-active {
+  background: var(--primary-darker);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(63, 84, 127, 0.45);
+}
+
+/* Search */
+
+.search-box {
+  position: relative;
+  min-width: 260px;
+  flex: 0 0 320px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: #ffffff;
+  font-size: 14px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.search-box input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+/* Cards grid */
+
+.cards-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+/* Card */
+
+.card {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  padding: 16px 16px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.14);
+  border-color: var(--primary);
+}
+
+.card-icon {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: var(--primary-darker);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Classe que estava quebrada no original */
+.card-ext {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Tipografia institucional */
+h1,
+h2,
+h3,
+.logo-text-main {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+.pill {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+}
+
+/* Textos complementares e UI */
+.card p,
+.clock-date,
+.page-header p,
+.footer {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* Responsividade básica para os cards */
+@media (max-width: 1100px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-box {
+    flex: 1 1 100%;
+  }
+}
+/* ====== LOGO SISP ====== */
+
+.sisp-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.sisp-icon {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+/* Texto principal "SISP" */
+.sisp-text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 42px;
+  letter-spacing: -1px;
+  color: #3b3b3b; /* Cinza escuro da imagem */
+}
+
+/* “I” com topo vermelho */
+.i-highlight {
+  position: relative;
+  padding-top: 4px;
+}
+
+.i-highlight::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 14px;
+  background: #e63932; /* Vermelho institucional */
+  border-radius: 2px;
+}
+
+/* Cantoneiras */
+.bracket {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 4px solid #e63932;
+}
+
+.bracket.top-right {
+  top: -8px;
+  right: -24px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.bracket.bottom-left {
+  bottom: -8px;
+  left: -24px;
+  border-right: none;
+  border-top: none;
+}
+
+/* Subtítulo */
+.sisp-subtitle {
+  font-family: "Montserrat", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  color: #6b6b6b;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.logo-sisp-img {
+  height: 100px;      /* ajuste aqui o tamanho conforme desejar */
+  width: auto;
+  display: block;
+}
