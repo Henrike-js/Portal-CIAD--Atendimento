@@ -254,7 +254,7 @@ Local da Chamada
     </div>
     <div class="w-12">
         <label>Número</label>
-        <input name="numero_chamada" type="number">
+        <input name="numero_chamada" type="number" pattern="\d*" title="Digite apenas números">
     </div>
     <div class="w-12">
         <label>Complemento</label>
@@ -265,7 +265,7 @@ Local da Chamada
 <div class="row">
     <div class="w-33"><label>Bairro</label><input name="bairro_chamada"></div>
     <div class="w-33"><label>Município</label><input name="municipio_chamada"></div>
-    <div class="w-33"><label>Telefone</label><input name="telefone_chamada"></div>
+    <div class="w-33"><label>Telefone<input name="telefone_chamada" type="tel" maxlength="15" pattern="\d*" title="Digite apenas números"> </div>
 </div>
 
 </fieldset>
@@ -288,14 +288,14 @@ Nome do Solicitante
 
 <div class="row">
     <div class="w-50"><label>Endereço</label><input name="endereco_solicitante"></div>
-    <div class="w-25"><label>Número</label><input name="numero_solicitante" type="number"></div>
+    <div class="w-25"><label>Número</label><input name="numero_solicitante" type="number"pattern="\d*" title="Digite apenas números"> </div>
     <div class="w-25"><label>Complemento</label><input name="complemento_solicitante"></div>
 </div>
 
 <div class="row">
     <div class="w-33"><label>Bairro</label><input name="bairro_solicitante"></div>
     <div class="w-33"><label>Município</label><input name="municipio_solicitante"></div>
-    <div class="w-33"><label>Telefone</label><input name="telefone_solicitante"></div>
+    <div class="w-33"><label>Telefone</label><input name="telefone_solicitante" type="tel" maxlength="15" pattern="\d*" title="Digite apenas números" ></div>
 </div>
 
 <div class="w-100">
@@ -329,6 +329,40 @@ data.value=now.toISOString().substring(0,10)
 hora_at.value=now.toTimeString().substring(0,5)
 </script>
 
+<script>
+// Permite digitar apenas números nos campos de telefone / numero de ederenços
+document.querySelectorAll('input[name="telefone_chamada"], input[name="telefone_solicitante"],input[name="numero_chamada"], input[name="numero_solicitante"')
+.forEach(function(campo){
+
+    const aviso = campo.nextElementSibling; // span logo abaixo
+
+    campo.addEventListener('input', function(){
+        this.value = this.value.replace(/[^0-9]/g, ''); // remove tudo que não é número
+
+        
+ });
+
+});
+</script>
+
+
+<script>
+// Máscara de telefone (99) 99999-9999
+function mascaraTelefone(valor) {
+    return valor
+        .replace(/\D/g, '')                 // Remove tudo que não é número
+        .replace(/^(\d{2})(\d)/, '($1) $2') // Adiciona parênteses no DDD
+        .replace(/(\d{5})(\d)/, '$1-$2')    // Adiciona hífen
+        .substring(0, 15);                  // Limita ao tamanho da máscara
+}
+
+document.querySelectorAll('input[name="telefone_chamada"], input[name="telefone_solicitante"]')
+.forEach(function(campo){
+    campo.addEventListener('input', function(){
+        this.value = mascaraTelefone(this.value);
+    });
+});
+</script>
 </body>
 </html>
 
