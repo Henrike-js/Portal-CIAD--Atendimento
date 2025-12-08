@@ -265,7 +265,7 @@ Local da Chamada
 <div class="row">
     <div class="w-33"><label>Bairro</label><input name="bairro_chamada"></div>
     <div class="w-33"><label>Município</label><input name="municipio_chamada"></div>
-    <div class="w-33"><label>Telefone<input name="telefone_chamada" type="tel" maxlength="15" pattern="\d*" title="Digite apenas números"> </div>
+    <div class="w-33"><label>Telefone<input name="telefone_chamada" type="tel" maxlength="15"  title="Digite apenas números"> </div>
 </div>
 
 </fieldset>
@@ -295,7 +295,7 @@ Nome do Solicitante
 <div class="row">
     <div class="w-33"><label>Bairro</label><input name="bairro_solicitante"></div>
     <div class="w-33"><label>Município</label><input name="municipio_solicitante"></div>
-    <div class="w-33"><label>Telefone</label><input name="telefone_solicitante" type="tel" maxlength="15" pattern="\d*" title="Digite apenas números" ></div>
+    <div class="w-33"><label>Telefone</label><input name="telefone_solicitante" type="tel" maxlength="15"  title="Digite apenas números" ></div>
 </div>
 
 <div class="w-100">
