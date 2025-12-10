@@ -1,0 +1,164 @@
+/* ===== TEMA BASEADO NO styles.css ===== */
+:root {
+  --primary: #2f5dff;
+  --primary-light: #e6ecff;
+  --bg: #f5f7fb;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --card-bg: #ffffff;
+  --border-soft: #e5e7eb;
+  --radius: 12px;
+  --shadow-soft: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+/* ===== GERAL ===== */
+body {
+  background: var(--bg);
+  font-family: "Source Sans Pro", system-ui, sans-serif;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ===== TOPO ===== */
+.header {
+  background: var(--card-bg);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.header-logo-text-main {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.header-logo-text-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.header-right {
+  font-size: 11px;
+  text-align: right;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  background: var(--card-bg);
+  height: calc(100vh - 56px);
+  padding: 10px;
+  border-right: 1px solid var(--border-soft);
+  overflow-y: auto;
+  box-shadow: inset -1px 0 0 var(--border-soft);
+}
+
+.sidebar-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* Grupo de códigos */
+.group-wrapper {
+  margin-bottom: 4px;
+}
+
+.group-btn {
+  width: 100%;
+  justify-content: space-between;
+  font-size: 13px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-soft);
+  background: var(--card-bg);
+  color: var(--text);
+  transition: all .15s ease;
+}
+
+.group-btn:hover {
+  background: var(--primary-light);
+}
+
+.group-btn.active {
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
+  color: var(--text) !important;
+}
+
+.badge-count {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Lista de naturezas aberta */
+.natureza-list {
+  margin-top: 4px;
+  margin-left: 6px;
+  padding-left: 6px;
+  border-left: 2px solid var(--primary-light);
+}
+
+/* Item da natureza */
+.natureza-item {
+  width: 100%;
+  font-size: 12px;
+  margin-bottom: 4px;
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--border-soft);
+  color: var(--text);
+}
+
+.natureza-item:hover {
+  background: var(--primary-light);
+}
+
+.natureza-item.active {
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
+  color: var(--text) !important;
+}
+
+.natureza-item small {
+  display: block;
+  color: var(--text-muted);
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+.content {
+  padding: 20px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+/* Placeholder */
+.placeholder {
+  text-align: center;
+  color: var(--text-muted);
+  margin-top: 80px;
+}
+
+.placeholder-icon {
+  font-size: 50px;
+  opacity: 0.4;
+  margin-bottom: 16px;
+}
+
+/* Detalhes do item */
+.detalhes-cabecalho {
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-soft);
+  padding-bottom: 10px;
+}
+
+.detalhes-cabecalho small {
+  color: var(--text-muted);
+}
