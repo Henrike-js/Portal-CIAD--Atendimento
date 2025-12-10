@@ -24,11 +24,22 @@ body{
 .gov-header{
     background:white;
     border-bottom:6px solid #C63232;
-    padding:20px 40px;
+    padding:20px 0; /
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
 }
-
+/* Wrapper interno para alinhar com .page */
+.gov-header > a {
+    width:100%;
+    max-width:1100px;   
+    margin:0 auto;      
+    padding:0 40px;     
+    display:flex;
+    align-items:center;
+}
 .gov-header img{
-    height:68px;
+    height:100px;
 }
 
 /* =================== PAGE ================= */
@@ -147,7 +158,9 @@ button:hover{background:#0D2345}
 <body>
 
 <header class="gov-header">
+    <a href="../index.html">
     <img src="sisp-logo.png" alt="SISP - Sistema Integrado de Segurança Pública">
+      </a>
 </header>
 
 
