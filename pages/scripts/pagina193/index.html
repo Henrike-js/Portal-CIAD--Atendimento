@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Roteiros 193 - CBMMG</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="h-screen overflow-hidden">
+
+  <!-- HEADER / LOGO -->
+  <header class="bg-white shadow-md p-4 flex items-center sticky top-0 z-10">
+    <a href="../paginatridigito.html" aria-label="Voltar para a página inicial">
+      <img src="sisp-logo.png" alt="Logo SISP" id="sisp-logo" class="h-10 w-auto mr-3 cursor-pointer">
+    </a>
+  </header>
+
+  <main class="main-container flex h-full">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar w-full lg:w-1/4 p-4 overflow-y-auto">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Buscar por Código, Título ou Descrição"
+        class="w-full p-2 mb-4 border rounded-lg"
+        aria-label="Pesquisar roteiros"
+      />
+      <div id="sidebar-menu" class="space-y-1"></div>
+    </aside>
+
+    <!-- ÁREA DE CONTEÚDO -->
+    <section id="content-area-main" class="content-area w-full lg:w-3/4 p-6 overflow-y-auto">
+      <div id="content-container">
+        <h2 class="text-xl font-semibold text-blue-700">Selecione uma Natureza</h2>
+        <p class="text-gray-500 mt-2">Use o menu lateral ou a busca para encontrar um roteiro de atendimento.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { ROTEIROS_DATA } from "./roteiros_data.js";
+
+    const contentContainer = document.getElementById("content-container");
+    const sidebarMenu = document.getElementById("sidebar-menu");
+    const searchInput = document.getElementById("search-input");
+
+    let roteiros = [];
+
+    function init() {
+      roteiros = ROTEIROS_DATA;
+      renderSidebar(roteiros);
+    }
+
+    function renderSidebar(data) {
+      sidebarMenu.innerHTML = "";
+      const groups = {};
+
+      data.forEach(r => {
+        const initial = String(r.codigo || "").charAt(0).toUpperCase() || "Outros";
+        if (!groups[initial]) groups[initial] = [];
+        groups[initial].push(r);
+      });
+
+      Object.keys(groups).sort().forEach(initial => {
+        const div = document.createElement("div");
+        div.className = "group-header";
+        div.textContent = `${initial} (${groups[initial].length})`;
+        div.onclick = () => renderList(groups[initial]);
+        sidebarMenu.appendChild(div);
+      });
+    }
+
+    function renderList(list) {
+      contentContainer.innerHTML =
+        `<h2 class="text-2xl font-bold mb-4 text-blue-700">Naturezas</h2>` +
+        list.map(r =>
+          `<div class="roteiro-item" data-codigo="${escapeHtml(r.codigo)}">
+            <span class="codigo">${escapeHtml(r.codigo)}</span>
+            <h4 class="text-blue-700">${escapeHtml(r.titulo)}</h4>
+            <p>${escapeHtml(r.descricao)}</p>
+          </div>`
+        ).join("");
+
+      document.querySelectorAll(".roteiro-item").forEach(item =>
+        item.onclick = () => renderDetails(item.dataset.codigo)
+      );
+    }
+
+    function renderDetails(codigo) {
+      const r = roteiros.find(x => x.codigo === codigo);
+      if (!r) return;
+
+      contentContainer.innerHTML = `
+        <div class="bg-white p-6 rounded-xl shadow-xl">
+          <span class="codigo">${escapeHtml(r.codigo)}</span>
+          <h2 class="text-3xl font-bold text-blue-700">${escapeHtml(r.titulo)}</h2>
+          <p class="text-gray-600">${escapeHtml(r.descricao)}</p>
+
+          <h3 class="text-xl font-bold mt-6 text-blue-700">Roteiro</h3>
+          <pre>${r.roteiro}</pre>
+
+          <button onclick="location.reload()" class="text-blue-600 mt-6">← Voltar</button>
+        </div>
+      `;
+    }
+
+    searchInput.addEventListener("keyup", () => {
+      const t = searchInput.value.toLowerCase().trim();
+      if (!t) {
+        // opcional: mostrar a tela inicial novamente
+        contentContainer.innerHTML = `
+          <h2 class="text-xl font-semibold text-blue-700">Selecione uma Natureza</h2>
+          <p class="text-gray-500 mt-2">Use o menu lateral ou a busca para encontrar um roteiro de atendimento.</p>
+        `;
+        return;
+      }
+
+      const filtered = roteiros.filter(r =>
+        (r.codigo || "").toLowerCase().includes(t) ||
+        (r.titulo || "").toLowerCase().includes(t) ||
+        (r.descricao || "").toLowerCase().includes(t)
+      );
+
+      renderList(filtered);
+    });
+
+    window.addEventListener("load", init);
+
+    /* ===== util ===== */
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+  </script>
+
+</body>
+</html>

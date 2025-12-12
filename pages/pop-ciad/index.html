@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>POP Teleatendimento — CIAD</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+  <!-- Seu CSS customizado -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="d-flex" id="app-root">
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="bg-white border-end">
+      <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-3">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-menu-button-wide fs-4 text-primary"></i>
+          <div>
+            <h5 class="mb-0">POP</h5>
+            <small class="text-muted">Teleatendimento</small>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline-secondary d-md-none" id="btn-toggle-sidebar">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-body px-2">
+        <ul class="nav flex-column" id="main-menu" role="menu">
+          <!-- Itens do menu (removido 'Chamadas Salvas') -->
+          <li class="nav-item"><a class="nav-link" href="#" data-target="dados-cad"><i class="bi bi-clipboard2-check me-2"></i>Registro CAD</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="rechamadas"><i class="bi bi-telephone-plus me-2"></i>Rechamadas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="falha"><i class="bi bi-bell-slash me-2"></i>Falhas Comunicação</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="trote"><i class="bi bi-chat-dots me-2"></i>Gerenciar Trotes</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="orgao"><i class="bi bi-arrow-left-right me-2"></i>Transferência CIAD</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="samu"><i class="bi bi-hospital me-2"></i>Transferência SAMU</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="busca-samu"><i class="bi bi-search me-2"></i>Consulta Municípios SAMU</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="militar"><i class="bi bi-telephone me-2"></i>Contato Militares</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="queixas"><i class="bi bi-hand-thumbs-up me-2"></i>Agradec/Reclamações</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-target="informacoes"><i class="bi bi-info-circle me-2"></i>Informações</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer px-3 py-3">
+        <small class="text-muted">Usuário: <strong>Atendente</strong></small>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main id="main-content" class="flex-grow-1">
+
+      <header class="d-md-none bg-white border-bottom p-2">
+        <button class="btn btn-outline-primary" id="btn-open-sidebar">
+          <i class="bi bi-list"></i> Menu
+        </button>
+      </header>
+
+      <div class="container-fluid p-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-gear"></i> POP Teleatendimento Unificado - CIAD</h4>
+          </div>
+
+          <div class="card-body">
+
+            <!-- ===== Registro CAD ===== -->
+            <section id="dados-cad" class="dynamic-content d-none">
+              <h5>Registro de Chamadas no CAD</h5>
+              <div class="mt-2">
+                <p><i class="bi bi-info-circle-fill"></i> <strong>Orientações principais</strong></p>
+                <ul>
+                  <li><strong>Objetivo:</strong> Criar a chamada no CAD com dados precisos e completos.</li>
+                  <li><strong>Iniciar registro:</strong> Clique no ícone de giroflex e inicie a coleta dos dados.</li>
+                  <li><strong>Dados essenciais:</strong> nome do solicitante (ou "anônimo"), telefone com DDD, natureza da ocorrência e endereço completo (logradouro, número, bairro, município).</li>
+                  <li><strong>Referências:</strong> postes, pontos comerciais, km em rodovias, cor do imóvel, etc.</li>
+                  <li><strong>Observações:</strong> sempre confirme telefone; para transferências para PMMG/PCMG confirmar se o número é ramal interno.</li>
+                </ul>
+
+                <h6>Campos recomendados para preencher:</h6>
+                <ol>
+                  <li>Solicitante (nome ou "anônimo").</li>
+                  <li>Telefone (DDD + número).</li>
+                  <li>Natureza (selecione a opção mais adequada no CAD).</li>
+                  <li>Endereço completo — incluir complemento e ponto de referência.</li>
+                  <li>Referências (REF:) e tempo do incidente (TAC:).</li>
+                </ol>
+
+                <p class="text-muted">Após preencher, confirme se o despacho foi gerado e registre o número do protocolo no histórico da chamada.</p>
+              </div>
+            </section>
+
+            <!-- ===== Rechamadas ===== -->
+            <section id="rechamadas" class="dynamic-content d-none">
+              <h5>Rechamadas de Emergência</h5>
+              <div class="mt-2">
+                <p><strong>Contexto:</strong> O sistema pode sinalizar rechamadas por mesmo telefone/endereço. Verifique ocorrências similares antes de criar nova chamada.</p>
+                <ul>
+                  <li>Se existir ocorrência em andamento, atualize os dados na ocorrência já criada (telefone adicional, localização precisa).</li>
+                  <li>Se for ocorrência diferente, proceda com a criação de nova chamada no CAD.</li>
+                  <li>Se houver conflito entre informações, contate o Supervisor de Teleatendimento.</li>
+                </ul>
+                <p><strong>Procedimentos comuns:</strong></p>
+                <ul>
+                  <li>Caso haja viatura empenhada, informe ao solicitante que já há atendimento em andamento.</li>
+                  <li>Se houver repetidas rechamadas com informações distintas, solicitar confirmação e anotar referências no histórico.</li>
+                </ul>
+              </div>
+            </section>
+
+            <!-- ===== Falhas na Comunicação ===== -->
+            <section id="falha" class="dynamic-content d-none">
+              <h5>Procedimentos para Falhas na Comunicação</h5>
+              <div class="mt-2">
+                <p><strong>Chamada muda (sem resposta):</strong></p>
+                <ul>
+                  <li>Tentar saudação clara até 3 vezes; se sem resposta, encerrar: "Sua ligação será encerrada por falta de comunicação."</li>
+                  <li>Qualificar no CAD como "<em>Falha na comunicação &gt; solicitante mudo</em>".</li>
+                </ul>
+
+                <p><strong>Ligação interrompida antes de dados mínimos:</strong></p>
+                <ul>
+                  <li>Qualificar como "<em>Falha na comunicação &gt; ligação caiu</em>" ou opção correspondente.</li>
+                </ul>
+
+                <p><strong>Solicitante estrangeiro:</strong></p>
+                <ul>
+                  <li>Se não houver conhecer o idioma, comunicar: "Aguarde um momento." e acionar o Supervisor para buscar alguém na equipe com fluência.</li>
+                  <li>Registrar no histórico: "Solicitante estrangeiro — idioma informado: [idioma]".</li>
+                </ul>
+              </div>
+            </section>
+
+            <!-- ===== Gerenciamento de Trotes ===== -->
+            <section id="trote" class="dynamic-content d-none">
+              <h5>Gerenciamento de Trotes</h5>
+              <div class="mt-2">
+                <p><strong>Definição:</strong> Chamadas com comportamento de trote (risadas, xingamentos, respostas não cooperativas).</p>
+                <p><strong>Procedimentos:</strong></p>
+                <ul>
+                  <li>Solicitar confirmação de informações (nome, logradouro) — se houver contradição, pode indicar trote.</li>
+                  <li>Em caso confirmado, informar: "Esta ligação foi registrada e poderá ser rastreada para fins de responsabilização penal e civil."</li>
+                  <li>Registrar no histórico como "suspeita de trote" e, se for o caso, transferir ao Supervisor.</li>
+                </ul>
+                <p class="text-muted">Se houver dúvida, prefira registrar informações básicas e acionar o Supervisor.</p>
+              </div>
+            </section>
+
+            <!-- ===== Transferência para Órgãos (CIAD) ===== -->
+            <section id="orgao" class="dynamic-content d-none">
+              <h5>Transferência para Polícia Militar / Bombeiros / Polícia Civil</h5>
+              <div class="mt-2">
+                <p><strong>Pergunta inicial:</strong> "A emergência é de competência de outro órgão?"</p>
+                <p><strong>Procedimento de transferência:</strong></p>
+                <ul>
+                  <li>Informar ao solicitante: "Senhor(a), aguarde enquanto transfiro sua ligação para o órgão responsável."</li>
+                  <li>Transferir para o ramal correto: <strong>190 (PM), 193 (Bombeiros), 197 (PC)</strong>.</li>
+                  <li>Registrar no histórico o ramal transferido e, se possível, nome do atendente receptor.</li>
+                </ul>
+              </div>
+            </section>
+
+            <!-- ===== Transferência SAMU ===== -->
+            <section id="samu" class="dynamic-content d-none">
+              <h5>Transferência para o SAMU</h5>
+              <div class="mt-2">
+                <p><strong>Objetivo:</strong> Transferir ocorrências de APH Clínico para as centrais SAMU.</p>
+                <ul>
+                  <li><strong>Ramais comuns:</strong> 192 (SAMU-BH), 403 (SAMU-Betim), 404 (SAMU-Contagem), 405 (SAMU-Sete Lagoas), 406 (SAMU-Divinópolis).</li>
+                  <li>Ao transferir, informe o número do protocolo e o nome do atendente receptor no histórico.</li>
+                </ul>
+                <p class="text-muted">Se não souber o ramal exato, contacte o Supervisor.</p>
+              </div>
+            </section>
+
+            <!-- ===== Consulta Municípios SAMU ===== -->
+            <section id="busca-samu" class="dynamic-content d-none">
+              <h5>SAMU — Consulta de Municípios Atendidos</h5>
+              <div class="mt-3 samu-search-container">
+                <div class="input-group mb-3">
+                  <input type="text" id="municipioInput" class="form-control" placeholder="Digite o nome do município (mínimo 3 caracteres)...">
+                  <button class="btn btn-primary" id="btn-pesquisar-samu">Pesquisar</button>
+                </div>
+                <div id="samu-result"></div>
+
+                <div class="mt-3">
+                  <p class="text-muted"><strong>Orientação:</strong> Utilize esta busca para identificar a central SAMU responsável pelo município informado.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== Contato com Militares ===== -->
+            <section id="militar" class="dynamic-content d-none">
+              <h5>Contato com Militares (COBOM / Cabines)</h5>
+              <div class="mt-2">
+                <p><strong>Procedimentos:</strong></p>
+                <ul>
+                  <li>Identificar patente e unidade do militar que solicita atendimento.</li>
+                  <li>Ao solicitar transferência, informar o nome do solicitante, telefone e natureza.</li>
+                  <li>Se o ramal estiver ocupado, informar: "O ramal está ocupado; posso tentar outro contato ou pedir que retorne mais tarde."</li>
+                </ul>
+                <p class="text-muted">Para pedidos de registro de empenho administrativo, transferir para o Supervisor.</p>
+              </div>
+            </section>
+
+            <!-- ===== Agradecimentos e Reclamações ===== -->
+            <section id="queixas" class="dynamic-content d-none">
+              <h5>Agradecimentos e Reclamações</h5>
+              <div class="mt-2">
+                <p><strong>Procedimentos:</strong></p>
+                <ul>
+                  <li>Registre manifestações simples como "informação/orientação".</li>
+                  <li>Para reclamações sobre conduta ou denúncia, orientar o cidadão a procurar a Corregedoria ou ligar para 181 (Disque Denúncia), quando aplicável.</li>
+                  <li>Se for uma queixa de ocorrência em andamento ou flagrante, transferir ao Supervisor e registrar no CAD se necessário.</li>
+                </ul>
+              </div>
+            </section>
+
+            <!-- ===== Informações Gerais ===== -->
+            <section id="informacoes" class="dynamic-content d-none">
+              <h5>Orientações e Informações</h5>
+              <div class="mt-2">
+                <p><strong>Contexto:</strong> Solicitações de informações diversas (projetos, documentos, orientações gerais).</p>
+                <ul>
+                  <li>Se a informação for de outra instituição, orientar o solicitante e, se necessário, transferir ao Supervisor.</li>
+                  <li>Para orientações sobre risco (ex: vazamento de gás, incêndio), solicite que aguardem enquanto verifica suporte e registre no histórico.</li>
+                </ul>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Scripts de interação / busca SAMU (sem funções de chamadas salvas) -->
+  <script>
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const btnOpen = document.getElementById('btn-open-sidebar');
+    const btnClose = document.getElementById('btn-toggle-sidebar');
+
+    function openSidebar() { sidebar.classList.add('sidebar-open'); }
+    function closeSidebar() { sidebar.classList.remove('sidebar-open'); }
+
+    if (btnOpen) btnOpen.addEventListener('click', openSidebar);
+    if (btnClose) btnClose.addEventListener('click', closeSidebar);
+
+    // Menu navigation
+    document.querySelectorAll('#main-menu .nav-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('#main-menu .nav-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+
+        const target = this.getAttribute('data-target');
+        document.querySelectorAll('.dynamic-content').forEach(s => s.classList.add('d-none'));
+        const el = document.getElementById(target);
+        if (el) el.classList.remove('d-none');
+
+        if (window.innerWidth < 768) closeSidebar();
+      });
+    });
+
+    // Inicialização: mostra 'dados-cad' por padrão
+    document.addEventListener('DOMContentLoaded', () => {
+      const defaultSection = document.getElementById('dados-cad');
+      if (defaultSection) {
+        document.querySelectorAll('#main-menu .nav-link').forEach(l => l.classList.remove('active'));
+        const first = document.querySelector('#main-menu .nav-link[data-target="dados-cad"]');
+        if (first) first.classList.add('active');
+        document.querySelectorAll('.dynamic-content').forEach(s => s.classList.add('d-none'));
+        defaultSection.classList.remove('d-none');
+      }
+    });
+
+    // ======= SAMU: base de municípios (mesma que você tinha) =======
+    const gruposSamu = {
+      "SAMU-BH": ["Belo Horizonte", "Belo Vale", "Caeté", "Confins", "Itabirito", "Jaboticatubas", "Lagoa Santa", "Mariana", "Matozinhos", "Moeda", "Nova Lima", "Nova União", "Ouro Preto", "Pedro Leopoldo", "Raposos", "Ribeirão das Neves", "Rio Acima", "Sabará", "Santa Luzia", "Santana do Riacho", "São José da Lapa", "Taquaraçu de Minas", "Vespasiano"],
+      "SAMU-Divinópolis": ["Aguanil", "Araújos", "Arcos", "Bambuí", "Bom Despacho", "Bonfim", "Brumadinho", "Camacho", "Campo Belo", "Cana Verde", "Candeias", "Carmo da Mata", "Carmo do Cajuru", "Carmópolis de Minas", "Cláudio", "Conceição do Pará", "Córrego Danta", "Córrego Fundo", "Cristais", "Crucilândia", "Divinópolis", "Dores do Indaiá", "Esmeraldas", "Estrela do Indaiá", "Florestal", "Formiga", "Igarapé", "Igaratinga", "Iguatama", "Itaguara", "Itapecerica", "Itatiaiuçu", "Itaúna", "Japaraíba", "Juatuba", "Lagoa da Prata", "Leandro Ferreira", "Luz", "Mário Campos", "Martinho Campos", "Mateus Leme", "Medeiros", "Moema", "Nova Serrana", "Oliveira", "Onça de Pitangui", "Pains", "Pará de Minas", "Passa Tempo", "Pedra do Indaiá", "Perdigão", "Piedade dos Gerais", "Piracema", "Pitangui", "Rio Manso", "Santana do Jacaré", "Santo Antônio do Amparo", "Santo Antônio do Monte", "São Francisco de Paula", "São Gonçalo do Pará", "São Joaquim de Bicas", "São José da Varginha", "São Sebastião do Oeste", "Serra da Saudade", "Tapiraí"],
+      "SAMU-Sete Lagoas": ["Araçaí", "Baldim", "Caetanópolis", "Cachoeira da Prata", "Cordisburgo", "Fortuna de Minas", "Inhaúma", "Jequitibá", "Maravilhas", "Papagaios", "Paraopeba", "Pompéu", "Santana de Pirapama", "Sete Lagoas"],
+      "SAMU-Contagem": ["Contagem", "Ibirité", "Sarzedo"],
+      "SAMU-Betim": ["Betim"]
+    };
+
+    // Pesquisa de município SAMU
+    const btnPesquisar = document.getElementById('btn-pesquisar-samu');
+    if (btnPesquisar) {
+      btnPesquisar.addEventListener('click', pesquisarMunicipio);
+    }
+    // também pesquisa ao pressionar Enter
+    const municipioInput = document.getElementById('municipioInput');
+    if (municipioInput) {
+      municipioInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') pesquisarMunicipio();
+      });
+    }
+
+    function pesquisarMunicipio() {
+      const inputEl = document.getElementById('municipioInput');
+      const resultDiv = document.getElementById('samu-result');
+      if (!inputEl || !resultDiv) return;
+      const input = inputEl.value.trim();
+      if (input.length < 3) {
+        resultDiv.innerHTML = '<p class="text-danger">Digite pelo menos 3 caracteres para pesquisar.</p>';
+        return;
+      }
+      const normalizedInput = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const resultados = [];
+
+      for (const [grupo, municipios] of Object.entries(gruposSamu)) {
+        const encontrados = municipios.filter(m => m.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedInput));
+        if (encontrados.length) resultados.push({ grupo, municipios: encontrados });
+      }
+
+      if (resultados.length === 0) {
+        resultDiv.innerHTML = `<p>Nenhum município encontrado para "<strong>${input}</strong>".</p>
+        <p class="text-muted">Se necessário, transfira ao Supervisor.</p>`;
+        return;
+      }
+
+      let html = `<p>Resultados para "<strong>${input}</strong>":</p>`;
+      resultados.forEach(r => {
+        html += `<div class="mb-2"><strong>${r.grupo}</strong><ul>${r.municipios.map(m => `<li>${m}</li>`).join('')}</ul></div>`;
+      });
+      resultDiv.innerHTML = html;
+    }
+
+  </script>
+
+</body>
+</html>
+
+  </script>
+
+    <script>
+        // Objeto Global para Armazenar Dados da Aplicação
+        // appData contém o histórico da navegação, o caminho de decisão e a árvore de dados.
+        const appData = {
+            history: [], // Armazena os IDs dos nós visitados para navegação de volta
+            pathHistory: [], // Armazena perguntas e respostas para o resumo final
+            currentSection: 'triagem', // Seção ativa do menu lateral
+            
+            // Base de dados dos municípios por grupo SAMU para consulta
+            gruposSamu: {
+                "SAMU-BH": ["Belo Horizonte", "Belo Vale", "Caeté", "Confins", "Itabirito", "Jaboticatubas", "Lagoa Santa", "Mariana", "Matozinhos", "Moeda", "Nova Lima", "Nova União", "Ouro Preto", "Pedro Leopoldo", "Raposos", "Ribeirão das Neves", "Rio Acima", "Sabará", "Santa Luzia", "Santana do Riacho", "São José da Lapa", "Taquaraçu de Minas", "Vespasiano"],
+                "SAMU-Divinópolis": ["Aguanil", "Araújos", "Arcos", "Bambuí", "Bom Despacho", "Bonfim", "Brumadinho", "Camacho", "Campo Belo", "Cana Verde", "Candeias", "Carmo da Mata", "Carmo do Cajuru, Carmópolis de Minas", "Cláudio", "Conceição do Pará", "Córrego Danta", "Córrego Fundo", "Cristais", "Crucilândia", "Divinópolis", "Dores do Indaiá", "Esmeraldas", "Estrela do Indaiá, Florestal", "Formiga", "Igarapé", "Igaratinga", "Iguatama", "Itaguara", "Itapecerica", "Itatiaiuçu", "Itaúna", "Japaraíba", "Juatuba", "Lagoa da Prata", "Leandro Ferreira", "Luz", "Mário Campos", "Martinho Campos", "Mateus Leme", "Medeiros", "Moema", "Nova Serrana", "Oliveira", "Onça de Pitangui", "Pains", "Pará de Minas", "Passa Tempo", "Pedra do Indaiá", "Perdigão", "Piedade dos Gerais", "Piracema", "Pitangui", "Rio Manso", "Santana do Jacaré", "Santo Antônio do Amparo", "Santo Antônio do Monte", "São Francisco de Paula", "São Gonçalo do Pará", "São Joaquim de Bicas", "São José da Varginha", "São Sebastião do Oeste", "Serra da Saudade", "Tapiraí"],
+                "SAMU-Sete Lagoas": ["Araçaí", "Baldim", "Caetanópolis", "Cachoeira da Prata", "Cordisburgo", "Fortuna de Minas", "Inhaúma", "Jequitibá", "Maravilhas", "Papagaios", "Paraopeba", "Pompéu", "Santana de Pirapama", "Sete Lagoas"],
+                "SAMU-Contagem": ["Contagem", "Ibirité", "Sarzedo"],
+                "SAMU-Betim": ["Betim"]
+            },
+            
+            // Árvore de decisão com perguntas, orientações e opções de navegação
+            treeData: {
+                1: {
+                    question: "Qual é a emergência? Entenda exatamente o que está acontecendo.",
+                    guidance: "<strong>Saudação inicial:</strong> Atenda a ligação dizendo:<strong> Bombeiros, emergência!</strong> Atendente [seu nome] Bom dia/tarde/noite. <br><br><strong>Perguntas essenciais:</strong><ul><li>Qual o seu nome? (Caso o solicitante não queira se identificar, registre como anônimo).</li><li>Qual sua emergência?</li><li>Qual seu endereço? (busque por referências do local da ocorrência)</li></ul><strong>Registro no CAD:</strong> A chamada é criada no CAD após inserir os dados iniciais. <br><strong>Regra dos 5W + H:</strong> (sempre que possível)<ul><li><strong>O que aconteceu?</strong> (Ex: incêndio em casa, atropelamento)</li><li><strong>Onde?</strong> (Local, referência, município)</li><li><strong>Quem?</strong> (Número de vítimas, perfil das pessoas)</li><li><strong>Quando?</strong> (Agora, há quanto tempo?)</li><li><strong>Como?</strong> (Causas possíveis: caiu de altura, batida etc.)</li><li><strong>Por quê?</strong> (Se souber ou deduzir)</li></ul><strong>Comentários/Histórico:</strong> Use o campo de histórico/comentários para informações extras com as seguintes abreviações:<br><strong>SIT:</strong> Situação no local (ex: “casa em chamas, moradores saíram”). <br><strong>VIT:</strong> Quantidade e condição das vítimas (ex: “1 adulto consciente, queimado”). <br><strong>REF:</strong> Referências adicionais (ex: “próximo ao campo do bairro X”). <br><strong>TAC:</strong> Tempo do acontecimento (ex: “5 minutos”).",
+                    options: [
+                        { text: "Incêndio, Fumaça ou Explosão", next: 2 },
+                        { text: "Acidente / Mal Súbito", next: 20 },
+                        { text: "Salvamento (Pessoa ou Animal)", next: 30 },
+                        { text: "Risco de Desabamento / Insetos / Queda de Árvore", next: 40 },
+                        { text: "Outros Assuntos (Informação, Engano)", next: 100 }
+                    ]
+                },
+
+		// Incêndios (Nós de 2 a 16)
+                2: {
+                    question: "Há pessoas feridas ou em perigo imediato?",
+                    guidance: "<strong>Avaliação de Risco à Vida (Prioridade Máxima):</strong> Esta é uma situação crítica que exige ação imediata. <br> <br><strong>Perguntas Essenciais para o Repasse:</strong><ul><li>Quantas pessoas estão envolvidas?</li><li>Qual a condição aparente dessas pessoas (conscientes, presas, queimadas, etc.)?</li><li>Qual o tipo de perigo imediato (chamas, fumaça, estrutura instável, etc.)?</li></ul><br><strong>Ação:</strong><ul><li>Crie a chamada,  coloque o <i>Alerta de chamada</i> e classifique a natureza como de <i>Alta</i> prioridade.</li><li>Repasse a chamada <strong>imediatamente</strong> ao Supervisor BM de Teleatendimento, fornecendo todas as informações detalhadas coletadas.</li></ul>",
+                    options: [
+                        { text: "Existem Pessoas feridas", next: 3 },
+                        { text: "Existem Pessoas em perigo imediato", next: 3 },
+                        { text: "Sem pessoas feridas ou em perigo", next: 4 },
+                        { text: "Solicitante não sabe informar", next: 4 }
+                    ]
+                },
+                3: {
+                    question: "Há pessoas presas ou sem condições de sair do local?",
+                    guidance: "<strong>Avaliação de Risco à Vida (Prioridade Máxima):</strong> Esta é uma situação de altíssimo risco que demanda informações precisas para o resgate. <br> <br><strong>Perguntas Essenciais para o Repasse:</strong><ul><li>Quantas pessoas estão presas ou sem condições de sair?</li><li>Onde exatamente elas estão (ex: em qual cômodo, sob escombros, dentro do veículo)?</li><li>O que está impedindo a saída (ex: portas bloqueadas, fogo, fumaça, estrutura caída)?</li><li>Qual a condição aparente dessas pessoas (conscientes, feridas, em pânico)?</li></ul><strong>Ação:</strong><ul><li>Crie a chamada,  coloque o <i>Alerta de chamada</i> e classifique a natureza como de <i>Alta</i> prioridade.</li><li>Repasse a chamada <strong>imediatamente</strong> ao Supervisor BM de Teleatendimento, fornecendo todas as informações detalhadas coletadas.</li></ul>",
+                    options: [
+                        { text: "Existem Pessoas presas no local", next: 4 },
+                        { text: "Existem Pessoas sem condições de sair do local", next: 4 },
+                        { text: "Local desocupado", next: 4 }
+                    ]
+                },
+                4: {
+                    question: "Há risco de explosão ou desabamento?",
+                    guidance: "<strong>Avaliação de Risco à Vida (Prioridade Máxima):</strong> Esta é uma situação extremamente perigosa que exige coleta de dados detalhados para uma resposta eficaz. <br> <br><strong>Perguntas Essenciais para o Repasse:</strong><ul><li>Qual o tipo de risco (ex: vazamento de gás, estrutura rachada, barulhos estranhos)?</li><li>Qual a localização exata do risco (ex: qual andar, qual parte da estrutura)?</li><li>Há pessoas no local ou nas proximidades?</li><li>Há sinais visíveis (ex: fumaça, cheiro forte, rachaduras grandes, inclinação da estrutura)?</li></ul><strong>Ação:</strong><ul><li>Crie a chamada,  coloque o <i>Alerta de chamada</i> e classifique a natureza como de <i>Alta</i> prioridade.</li><li>Repasse a chamada <strong>imediatamente</strong> ao Supervisor BM de Teleatendimento, fornecendo todas as informações detalhadas coletadas.</li></ul>",
+                    options: [
+                        { text: "Existe risco de explosão", next: 5 },
+                        { text: "Existe risco de desabamento", next: 5 },
+                        { text: "Sem risco de explosão ou desabamento", next: 5 }
+                    ]
+                },
+                5: {
+                    question: "Onde está o Incêndio ou a Fumaça?",
+                    guidance: "<strong>Grupo O: Explosão e Incêndio</strong> <br>Este grupo engloba ocorrências de incêndios e explosões, que demandam o acionamento de caminhões de combate a incêndio (Auto-Bombas, Auto-Bombas-Tanque, Auto-Bombas-Salvamento). Lembre-se: incêndio é o fogo em descontrole com potencial de causar danos. <br> <br><strong>Para direcionar o atendimento, identifique o local e o tipo de incêndio:</strong><ul><li>O fogo/fumaça está em um prédio, casa ou outro tipo de construção?</li><li>Está em uma área de mata, terreno baldio ou ao ar livre?</li><li>É um veículo (carro, moto, caminhão, etc.)?</li><li>Envolve postes, fiação ou transformadores elétricos?</li><li>Há algo mais específico, como uma explosão, vazamento de gás ou fogo em outros materiais?</li></ul>",
+                    options: [
+                        { text: "Incêndio em Edificação", next: 6 },
+                        { text: "Incêndio em Vegetação ou área externa", next: 10 },
+                        { text: "Incêndio em Veículo", next: 12 },
+                        { text: "Incêndio em Instalação Elétrica (Poste/Rede)", next: 16 },
+                        { text: "Outros riscos (Explosão, Princípio de Incêndio, Vazamento)", next: 14 }
+                    ]
+                },
+                6: {
+                    question: "Você está vendo fogo ou Fumaça agora?",
+                    guidance: "<strong>Confirmação Visual:</strong> É crucial confirmar se há fogo ou fumaça visível para entender o estágio do incêndio e planejar a resposta. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>O solicitante está dentro ou fora do imóvel?</li><li>Ele/Ela vê fogo ou apenas fumaça?</li><li>Onde exatamente o fogo/fumaça está localizado (ex: qual cômodo, qual andar, no telhado)?</li></ul>",
+                    options: [
+                        { text: "Fogo visível", next: 7 },
+                        { text: "Apenas fumaça", next: 7 },
+                        { text: "Solicitante não sabe informar", next: 8 }
+                    ]
+                },
+                7: {
+                    question: "O fogo está apenas em um cômodo ou se espalhou para outros locais?",
+                    guidance: "<strong>Extensão do Incêndio em Edificações:</strong> Entender a dimensão do incêndio é fundamental para o planejamento e o acionamento das equipes adequadas. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>Quantos cômodos ou andares estão em chamas ou afetados pela fumaça?</li><li>O fogo está se espalhando rapidamente?</li><li>Há risco de atingir edificações vizinhas? (Pergunte sobre a proximidade e tipo de construção ao redor)</li><li>Há materiais combustíveis próximos que possam agravar a situação?</li></ul>",
+                    options: [
+                        { text: "Multiplos cômodos/pavimentos afetados", next: 8 },
+                        { text: "Somente um cômodo afetado", next: 8 },
+                        { text: "Fogo ameaça imóveis vizinhos", next: 8 },
+                        { text: "Princípio ou suspeita", next: 8 }
+                    ]
+                },
+                8: {
+                    question: "Que tipo de edificação está pegando fogo?",
+                    guidance: "<strong>Classificação da Edificação:</strong> O tipo de edificação impacta diretamente o risco e a complexidade do combate, influenciando o número e tipo de equipes a serem acionadas. Edificações com grande concentração de pessoas ou materiais perigosos exigem prioridade. <br> <br><strong>Perguntas Essenciais para Classificação:</strong><ul><li>É um local com grande fluxo ou concentração de pessoas (ex: hospital, escola, shopping, asilo, teatro)?</li></li><li>É um prédio de apartamentos ou uma casa particular?</li><li>É um galpão, depósito ou área industrial? Está ocupado ou desocupado?</li><li>Há informações sobre materiais perigosos armazenados no local?</li></ul>",
+                    options: [
+                        { text: "Hospital/escola/asilo/local com muitas pessoas", next: 9 },
+                        { text: "Prédio residencial", next: 9 },
+                        { text: "Casa unifamiliar", next: 9 },
+                        { text: "Prédio comercial ou misto", next: 9 },
+                        { text: "Galpão/depósito desocupado", next: 9 }
+                    ]
+                },
+                9: {
+                    question: "A via permite acesso para caminhão?",
+                    guidance: "<strong>Acesso da Viatura:</strong> É <strong>fundamental</strong> confirmar se a via até o local da ocorrência permite o acesso de caminhões de grande porte (Auto-Bombas, Auto-Bombas-Tanque). Isso impacta diretamente o tempo de resposta, o despacho da equipe e a segurança operacional. <br> <br><strong>Perguntas Essenciais para Avaliar o Acesso:</strong><ul><li>A rua é estreita? Há curvas acentuadas ou obstáculos (ex: postes caídos, árvores, veículos estacionados de forma irregular)?</li><li>É uma área rural com estradas de terra ou difícil pavimentação?</li><li>Há pontes ou viadutos com restrição de peso/altura?</li><li>O local é de difícil acesso por outros motivos (ex: vielas, becos, áreas de morro)?</li></ul>",
+                    options: [
+                        { text: "Sim", next: 90 },
+                        { text: "Não. Acesso difícil/área rural", next: 92 }
+                    ]
+                },
+                10: {
+                    question: "O fogo está próximo de casas ou outros prédios?",
+                    guidance: "<strong>Proximidade e Risco de Propagação:</strong> É fundamental avaliar se o incêndio em vegetação ou área externa oferece risco a edificações, veículos ou pessoas, determinando a urgência do atendimento. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>A que distância o fogo está de casas, prédios, veículos ou outras estruturas?</li><li>Há risco de o fogo se espalhar para essas áreas?</li><li>Há pessoas próximas que possam ser afetadas pela fumaça ou chamas (especialmente idosos, crianças, ou com problemas respiratórios)?</li><li>Qual a altura das chamas e da vegetação?</li><li>O terreno é de fácil ou difícil acesso para as equipes? É área urbana ou rural?</li></ul>",
+                    options: [
+                        { text: "Menos de 50 metros de edificações", next: 11 },
+                        { text: "50 a 200 metros de edificações", next: 11 },
+                        { text: "Mais de 200 metros de edificações", next: 11 }
+                    ]
+                },
+                11: {
+                    question: "Qual o tamanho aproximado da área que está queimando?",
+                    guidance: "<strong>Estimativa da Extensão da Área:</strong> A dimensão da área em chamas é crucial para dimensionar os recursos necessários para o combate. Lembre-se: 1 hectare equivale a um quadrado de 100x100 metros. <br> <br><strong>Perguntas Essenciais para Estimativa:</strong><ul><li>O fogo está em uma área pequena (ex: um lote, um jardim)?</li><li>Parece ser uma área maior, equivalente a um campo de futebol ou mais?</li><li>Qual a altura das chamas e a densidade da vegetação?</li><li>O incêndio está em área urbana ou rural?</li><li>Há risco de o fogo atingir outras propriedades ou áreas sensíveis?</li></ul>",
+                    options: [
+                        { text: "Mais de 01 hectare queimando", next: 100 },
+                        { text: "Até 01 hectare queimando", next: 100 },
+                        { text: "Área pequena (um lote) queimando", next: 100 }
+                    ]
+                },
+                12: {
+                    question: "Qual o tipo de Veículo?",
+                    guidance: "<strong>Incêndio em Veículos:</strong> Estas ocorrências são de alta prioridade devido ao risco de explosão, vazamento de combustível e presença de vítimas. A coleta eficiente de informações é crucial para a segurança das equipes e o sucesso do combate. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>Há alguém dentro do veículo ou nas proximidades?</li><li>Qual o tipo de veículo (carro de passeio, caminhão, ônibus, etc.)?</li><li>Qual o tipo de combustível (gasolina, diesel, GNV, híbrido, elétrico)?</li><li>Se for veículo de carga, qual o tipo de carga que está transportando? (Ex: inflamáveis, produtos químicos, etc.)</li><li>Onde o veículo está pegando fogo (ex: motor, parte traseira, interior)?</li><li>Há risco de explosão ou vazamento de combustível?</li></ul>",
+                    options: [
+                        { text: "Incêndio em carro", next: 13 },
+                        { text: "Incêndio em ônibus", next: 13 },
+                        { text: "Incêndio em caminhão", next: 13 },
+                        { text: "Incêndio em outro tipo de veículo", next: 13 }
+                    ]
+                },
+                13: {
+                    question: "Você está vendo fogo ou Fumaça agora?",
+                    guidance: "<strong>Confirmação Visual:</strong> É crucial confirmar se há fogo ou fumaça visível para entender o estágio do incêndio e planejar a resposta. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>O solicitante está dentro ou fora do veículo?</li><li>Ele/Ela vê fogo ou apenas fumaça?</li><li>Onde exatamente o fogo/fumaça está localizado (ex: no motor, nos bancos, na carga transportada)?</li></ul>",
+                    options: [
+                        { text: "Fogo visível", next: 14 },
+                        { text: "Apenas fumaça", next: 14 },
+                        { text: "Não há confirmação visual", next: 14 }
+                    ]
+                },
+                14: {
+                    question: "Existe algum produto vazando?",
+                    guidance: "<strong>Outros Tipos de Incêndio e Vazamentos:</strong> Este bloco abrange situações diversas como explosões, vazamentos de substâncias perigosas e incêndios em contextos específicos (locomotivas, aeronaves, embarcações). A identificação do produto vazando é crucial para a segurança das equipes e o tipo de resposta. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>Qual o tipo de produto que está vazando (gás, líquido inflamável, produto químico desconhecido)?</li><li>Há algum cheiro forte, fumaça ou vapor incomum?</li><li>O que causou o vazamento ou a explosão?</li><li>Há vítimas ou pessoas expostas ao produto?</li><li>Alguém já tentou conter o vazamento ou apagar o fogo? Com o quê?</li><li>O local é residencial, comercial ou industrial?</li></ul>",
+                    options: [
+                        { text: "Vazamento de GLP/gás natural", next: 15 },
+                        { text: "Vazamento de Líquido inflamável", next: 15 },
+                        { text: "Vazamento de Produto químico desconhecido", next: 15 },
+                        { text: "Não existe sinal de vazamento", next: 93 }
+                    ]
+                },
+                15: {
+                    question: "O vazamento é em área aberta ou fechada?",
+                    guidance: "<strong>Avaliação do Ambiente do Vazamento:</strong> A localização do vazamento (ambiente aberto ou fechado) é crucial para determinar o nível de risco e a estratégia de resposta. Vazamentos em ambientes fechados concentram gases/vapores, aumentando significativamente o perigo de explosão ou intoxicação. <br> <br><strong>Perguntas Essenciais para Avaliação:</strong><ul><li>Se for ambiente fechado, qual o tamanho do local? Há ventilação? Quantas pessoas estão dentro ou estavam no momento do vazamento?</li><li>Se for área aberta, o vazamento está próximo a ralos, bueiros, cursos d'água ou áreas de grande circulação de pessoas?</li><li>Qual a intensidade do vazamento? É um gotejamento, um fluxo contínuo ou um jato?</li><li>Há alguma fonte de ignição próxima (ex: chamas, faíscas, equipamentos elétricos)?</li></ul><strong>Orientação:</strong> Oriente o solicitante a isolar a área em 100m, evitar contato com líquidos/vapores e não usar equipamentos elétricos.",
+                    options: [
+                        { text: "Ambiente fechado", next: 91 },
+                        { text: "Área aberta", next: 100 }
+                    ]
+                },
+                16: {
+                    question: "A CEMIG já foi acionada?",
+                    guidance: "<strong>Incêndio em Instalações Elétricas:</strong> O risco elétrico é a principal preocupação em ocorrências envolvendo instalações públicas (postes, transformadores, fiação). O combate ao fogo só pode ser iniciado com segurança após a interrupção da energia pela concessionária. <br> <br><strong>Ações Essenciais:</strong><ul><li><strong>Prioridade:</strong> A segurança é primordial. Oriente o solicitante a manter distância e isolar a área, se possível.</li><li><strong>Avaliação:</strong> O fogo está atingindo fios, transformadores ou outros equipamentos elétricos?</li><li><strong>Risco:</strong> Há algo próximo que possa pegar fogo (ex: vegetação, edificações, veículos)?</li><li><strong>CEMIG:</strong> Se a CEMIG já foi acionada, qual o número do protocolo? (Isso agiliza a coordenação).</li></ul>",
+                    options: [
+                        { text: "CEMIG já foi acionada", next: 93 },
+                        { text: "Não acionaram a CEMIG ", next: 100 }
+                    ]
+                },
+
+                // APH - Atendimento Pré-Hospitalar (nós de 20 a 29)
+                20: {
+                    question: "A vítima está consciente ou responde a estímulos?",
+                    guidance: "<strong>APH - Avaliação do Nível de Consciência:</strong> É o primeiro passo crucial para determinar a gravidade da vítima e a urgência do atendimento. <br> <br><strong>Oriente o solicitante como avaliar:</strong><ul><li><strong>Chame a vítima:</strong> Pergunte em voz alta 'Você está bem?'.</li><li><strong>Toque:</strong> Se não responder, toque ou chacoalhe levemente os ombros da vítima.</li><li><strong>Observe:</strong> Ela abre os olhos, fala, ou reage a algum estímulo?</li><li><strong>Pergunte ao solicitante:</strong> 'A vítima responde quando você fala com ela ou toca nela?'</li></ul>",
+                    options: [
+                        { text: "Vítima consciente", next: 21 },
+                        { text: "Vítima incosciente", next: 21 }
+                    ]
+                },
+                21: {
+                    question: "A vítima respira normalmente?",
+                    guidance: "<strong>Urgência Crítica - Avaliação da Respiração:</strong> A avaliação da respiração é um dos indicadores mais importantes de uma emergência grave, como Parada Cardiorrespiratória (PCR) ou Obstrução de Vias Aéreas por Corpo Estranho (OVACE). <br> <br><strong>Oriente o solicitante como avaliar a respiração:</strong><ul><li><strong>Observe o peito:</strong> O peito da vítima sobe e desce?</li><li><strong>Ouça:</strong> Há algum som de respiração (sopros, chiados, roncos)?</li><li><strong>Sinta:</strong> Aproxime o ouvido do nariz/boca da vítima para sentir o air.</li><li><strong>Pergunte:</strong> 'A vítima está respirando de forma regular e sem esforço, ou está com dificuldade, ofegante, ou não respira de jeito nenhum?'</li></ul><br><strong>Classificação da Urgência:</strong><ul><li><strong>Vítima respira normalmente:</strong> Siga para a próxima avaliação.</li><li><strong>Vítima em Parada Cardiorrespiratória (PCR):</strong> Não respira e não responde. <strong>PRIORIDADE MÁXIMA.</strong></li><li><strong>Vítima com Obstrução de Vias Aéreas (OVACE):</strong> Engasgando, sem conseguir falar ou tossir. <strong>PRIORIDADE MÁXIMA.</strong></li><li><strong>Vítima com dificuldade em respirar (PR):</strong> Respiração ofegante, ruidosa, com esforço. <strong>PRIORIDADE MÁXIMA.</strong></li></ul>",
+                    options: [
+                        { text: "Vítima respira normalmente", next: 22 },
+                        { text: "Vítima em Parada Cardiorrespiratória", next: 100 }, // PCR - prioridade máxima
+                        { text: "Vítima com Obstrução de vias aéreas", next: 100 }, // OVACE - prioridade máxima
+                        { text: "Vítima com dificuldade em respirar", next: 100 } // PR - prioridade máxima
+                    ]
+                },
+                22: {
+                    question: "A queixa é clínica (mal súbito, dor) ou traumática (queda, batida)?",
+                    guidance: "<strong>Classificação da Natureza da Ocorrência (Clínica vs. Traumática):</strong> É fundamental classificar corretamente a natureza da emergência para direcionar o atendimento do APH. <br><ul><li><strong>Queixa Clínica:</strong> Refere-se a problemas de saúde internos, sem causa externa aparente. Ex: mal súbito, dor no peito, desmaio, convulsão, febre alta, dificuldade para respirar sem trauma.</li><li><strong>Queixa Traumática:</strong> Refere-se a lesões causadas por uma força externa. Ex: queda, atropelamento, acidente de trânsito, ferimento por arma branca/fogo, queimadura, choque elétrico.</li></ul><br><strong>Pergunte ao solicitante:</strong> 'O que aconteceu para a vítima estar nesta situação? Foi um problema de saúde ou algum tipo de acidente/lesão?'",
+                    options: [
+                        { text: "Clínica", next: 23 },
+                        { text: "Traumática", next: 24 }
+                    ]
+                },
+                23: {
+                    question: "A vítima apresenta sinais de risco: fala incompreensível, pele fria, respiração difícil?",
+                    guidance: "<strong>Instabilidade Clínica - Identificação de Sinais de Risco Iminente:</strong> É crucial identificar rapidamente sinais que indiquem uma piora do quadro clínico da vítima, necessitando de atendimento prioritário. <br> <br><strong>Perguntas Essenciais para Identificar Sinais de Risco:</strong><ul><li><strong>Fala:</strong> A vítima consegue falar normalmente? A fala está arrastada, confusa ou incompreensível?</li><li><strong>Pele:</strong> A pele está pálida, fria, suada ou azulada (cianótica)?</li><li><strong>Respiração:</strong> A respiração está muito rápida, muito lenta, superficial ou com muito esforço?</li><li><strong>Outros sinais:</strong> Há dor intensa, tontura, confusão mental, desmaio, sangramento visível, ou qualquer outra mudança súbita no estado da vítima?</li></ul><br><strong>Classificação:</strong><ul><li><strong>Vítima em estado grave:</strong> Se qualquer um desses sinais de risco estiver presente. <strong>PRIORIDADE MÁXIMA.</strong></li><li><strong>Vítima estável:</strong> Se nenhum desses sinais estiver presente e a vítima parecer consciente e sem piora.</li></ul>",
+                    options: [
+                        { text: "Vítima em estado grave", next: 100 },  // TRAUMA GRAVE - prioridade máxima
+                        { text: "Vítima estável", next: 100 }
+                    ]
+                },
+                24: {
+                    question: "Há sangramento ativo, fraturas ou dor intensa?",
+                    guidance: "<strong>Gravidade do Trauma - Avaliação da Urgência:</strong> A presença de sangramento ativo, fraturas ou dor intensa indica um trauma de maior gravidade, exigindo atendimento prioritário. <br> <br><strong>Perguntas Essenciais para Avaliar o Trauma (Instrua o Solicitante):</strong><ul><li><strong>Sangramento:</strong> Há algum sangramento visível? Onde? É um sangramento pequeno, moderado ou intenso (jorrando)?</li><li><strong>Fraturas/Deformidades:</strong> Há alguma parte do corpo com deformidade, inchaço significativo, ou a vítima relata ter ouvido um 'estalo' ou 'quebra'?</li><li><strong>Dor:</strong> A vítima está sentindo dor? Qual a intensidade da dor (de 0 a 10, sendo 10 a pior dor possível)? Onde é a dor?</li><li><strong>Mobilidade:</strong> A vítima consegue mover a parte do corpo afetada?</li></ul><br><strong>Classificação:</strong><ul><li><strong>Vítima com sangramento ativo:</strong> Se houver sangramento que não para ou é intenso. <strong>PRIORIDADE MÁXIMA.</strong></li><li><strong>Vítima com fratura:</strong> Se houver suspeita de fratura ou deformidade. <strong>PRIORIDADE MÁXIMA.</strong></li><li><strong>Vítima com muita dor:</strong> Se a dor for incapacitante ou muito intensa. <strong>PRIORIDADE MÁXIMA.</strong></li><li><strong>Vítima sem lesão grave:</strong> Se não houver sangramento ativo, fraturas aparentes ou dor intensa.</li></ul>",
+                    options: [
+                        { text: "Vítima com sangramento", next: 100 }, // SANGRAMENTO - prioridade máxima
+                        { text: "Vítima com fratura", next: 100 },
+                        { text: "Vítima com muita dor", next: 100 },
+                        { text: "Vítima sem lesão grave", next: 100 }
+                    ]
+                },
+
+                // Salvamento (nós de 30 a 36)
+                30: {
+                    question: "Há pessoas feridas ou em perigo imediato?",
+                    guidance: "<strong>Avaliação de Risco à Vida (Prioridade Máxima):</strong> Esta é uma situação crítica que exige ação imediata. <br> <br><strong>Perguntas Essenciais para o Repasse:</strong><ul><li>Quantas pessoas estão envolvidas?</li><li>Qual a condição aparente dessas pessoas (conscientes, presas, feridas, etc.)?</li><li>Qual o tipo de perigo imediato (afogamento, queda, ataque, etc.)?</li></ul><br><strong>Ação:</strong><ul><li>Crie a chamada,  coloque o <i>Alerta de chamada</i> e classifique a natureza como de <i>Alta</i> prioridade.</li><li>Repasse a chamada <strong>imediatamente</strong> ao Supervisor BM de Teleatendimento, fornecendo todas as informações detalhadas coletadas.</li></ul>",
+                    options: [
+                        { text: "Existem Pessoas feridas", next: 31 },
+                        { text: "Existem Pessoas em perigo imediato", next: 31 },
+                        { text: "Sem pessoas feridas ou em perigo", next: 31 },
+                        { text: "Solicitante não sabe informar", next: 31 }
+                    ]
+                },
+                31: {
+                    question: "Qual o Tipo de Salvamento?",
+                    guidance: "<strong>Classificação do Tipo de Salvamento:</strong> A correta identificação do tipo de salvamento é essencial para o despacho da equipe e dos equipamentos adequados. <br> <br><strong>Tipos de Salvamento e suas características:</strong><ul><li><strong>Pessoa Presa em Ferragens:</strong> Geralmente em acidentes veiculares, onde a vítima está impossibilitada de sair do veículo.</li><li><strong>Pessoa Ilhada ou Afogada:</strong> Vítima em meio líquido (inundação, rio, piscina) ou isolada por água.</li><li><strong>Pessoa Desaparecida:</strong> Busca por indivíduos perdidos, especialmente em áreas de mata ou de difícil acesso.</li><li><strong>Ameaça de Suicídio:</strong> Indivíduo em situação de risco iminente de tirar a própria vida, muitas vezes em altura ou local perigoso.</li><li><strong>Animal em Risco ou Agressivo:</strong> Animais em perigo (presos, feridos) ou que representam ameaça à população.</li></ul><br><strong>Pergunte ao solicitante:</strong><ul><li>O que exatamente está acontecendo?</li><li>A pessoa/animal está presa, na água ou perdida?</li><li>A pessoa está ameaçando a própria vida?</li><li>É um animal perigoso que está onde?</li></ul>",
+                    options: [
+                        { text: "Acidente de trânsito", next: 32 },
+                        { text: "Pessoa Ilhada ou Afogada", next: 33 },
+                        { text: "Pessoa Desaparecida", next: 34 },
+                        { text: "Ameaça de Suicídio", next: 35 },
+                        { text: "Animal em Risco ou Agressivo", next: 36 }
+                    ]
+                },
+                32: {
+                    question: "Existem vítimas presas ou o veículo está instável?",
+                    guidance: "<strong>Salvamento Veicular:</strong> Este tipo de ocorrência envolve colisões com vítimas presas às ferragens ou veículos em situações de instabilidade (tombados, em ribanceiras, capotados) que necessitam de estabilização ou técnicas de desencarceramento (expansão, corte). <br> <br><strong>Perguntas Essenciais:</strong><ul><li>Quantas vítimas estão presas às ferragens? Qual a condição delas (conscientes, feridas)?</li><li>O veículo está instável (tombado, em ribanceira, com risco de queda)?</li><li>Há vazamento de combustível, óleo ou algum tipo de carga (se for veículo de carga)?</li><li>Qual a localização exata do acidente e pontos de referência?</li><li>Há risco de incêndio ou explosão?</li></ul>",
+                    options: [
+                        { text: "Vítima presa nas ferragens", next: 100 },
+                        { text: "Veículo com risco de tombamento ou queda", next: 100 },
+                        { text: "Acidente sem vítimas presas", next: 100 }
+                    ]
+                },
+                33: {
+                    question: "Quantas vítimas estão na água ou ilhadas? Elas estão visíveis?",
+                    guidance: "<strong>Afogamento / Ilhamento:</strong> O Corpo de Bombeiros atua no resgate de vítimas em meio líquido, incluindo pessoas ilhadas em inundações/alagamentos, e salvamento de vítimas de afogamento (que não evoluíram a óbito) ou recuperação de corpos submersos. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>Quantas pessoas estão na água ou ilhadas?</li><li>Elas estão conscientes? Conseguem se comunicar?</li><li>Qual o nível da água? Há correnteza forte?</li><li>Onde exatamente a vítima está (ex: rio, piscina, enchente, lagoa)?</li><li>Há algum objeto flutuando ou algo que a vítima possa se segurar?</li><li>A vítima está visível ou submersa? Há quanto tempo?</li></ul>",
+                    options: [
+                        { text: "Vítima Visível ou ilhada", next: 100 },
+                        { text: "Vítima Submersa ou não localizada", next: 100 }
+                    ]
+                },
+                34: {
+                    question: "A vítima desaparecida é criança, idoso, pessoa com deficiência ou transtorno mental?",
+                    guidance: "<strong>Busca de Pessoa Desaparecida:</strong> A atuação do CBMMG foca em áreas remotas, de difícil acesso ou matas. A coleta de informações detalhadas é vital para traçar o perfil da vítima e direcionar as equipes de busca. (Natureza S 04.007). <br> <br><strong>Perguntas Essenciais para a Busca:</strong><ul><li>Onde exatamente a pessoa desapareceu? (Ex: trilha, floresta, área rural, cidade?)</li><li>Há quanto tempo a pessoa está desaparecida?</li><li>Qual o perfil da vítima (idade, condição de saúde, mobilidade, uso de medicamentos)?</li><li>Quais eram as últimas vestimentas da pessoa? Havia algum objeto de valor ou identificação com ela?</li><li>Qual a condição climática atual no local do desaparecimento? (Chuva, frio, calor)</li><li>Há alguma informação sobre para onde a pessoa poderia ter ido ou o que estava fazendo?</li><li>Há histórico de desaparecimentos anteriores ou problemas de saúde mental?</li></ul>",
+                    options: [
+                        { text: "Criança desparecida", next: 100 },
+                        { text: "Idoso desparecida", next: 100 },
+                        { text: "Pessoa com deficiência ou trantorno desparecida", next: 100 },
+                        { text: "Desaparecimento de adulto Recente (menos de 6h)", next: 100 },
+                        { text: "Desaparecimento de adulto Prolongado (mais de 6h)", next: 100 }
+                    ]
+                },
+                35: {
+                    question: "A pessoa ameaça se ferir ou está em local de risco (altura, ponte, telhado)?",
+                    guidance: "<strong>Atendimento a Tentativa de Suicídio:</strong> O Corpo de Bombeiros atua em situações de risco iminente, especialmente em locais elevados (árvores, prédios, pontes) que exigem técnicas de salvamento em altura. É crucial diferenciar se a ação já foi iniciada ou se ainda é uma ameaça, e se há risco para outras pessoas. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>A pessoa está ameaçando se machucar ou já iniciou alguma ação (ex: se cortou, tomou algo, pulou, está prestes a pular)?</li><li>Onde a pessoa está localizada (ex: em altura, em local perigoso, dentro de um veículo, em casa)?</li><li>A pessoa está sozinha ou há alguém com ela?</li><li>Há algum negociador ou profissional de saúde mental no local?</li><li>Há risco para outras pessoas nas proximidades?</li><li>A pessoa está trancada em algum ambiente?</li></ul><strong>Ação:</strong><ul><li>Crie a chamada,  coloque o <i>Alerta de chamada</i> e classifique a natureza como de <i>Alta</i> prioridade.</li><li>Repasse a chamada <strong>imediatamente</strong> ao Supervisor BM de Teleatendimento, fornecendo todas as informações detalhadas coletadas.</li></ul>",
+                    options: [
+                        { text: "Ameaça ativa ou tentativa", next: 100 },
+                        { text: "Relato anterior sem risco atual", next: 93 },
+                        { text: "Tentante em óbito", next: 100 }
+                    ]
+                },
+                36: {
+                    question: "O animal representa risco a pessoas ou está em local de difícil acesso?",
+                    guidance: "<strong>Salvamento Envolvendo Animal:</strong> Esta categoria abrange situações em que animais estão em perigo (presos, feridos, em locais de difícil acesso) ou representam uma ameaça à segurança da população (agressivos, soltos em via pública). <br> <br><strong>Perguntas Essenciais:</strong><ul><li>Qual o tipo de animal (ex: cão, gato, cobra, cavalo, animal silvestre)?</li><li>Onde o animal está localizado (ex: em altura, em bueiro, em via pública, dentro de uma casa)?</li><li>Qual a situação do animal (ex: preso, ferido, agressivo, doente, abandonado)?</li><li>O animal oferece risco a pessoas ou outros animais? (Ex: mordeu alguém, está atacando?)</li><li>Há alguma pessoa tentando ajudar o animal?</li><li>Já foi acionado algum órgão de controle animal ou ambiental?</li></ul>",
+                    options: [
+                        { text: "Animal preso ou ferido", next: 100 },
+                        { text: "Animal preso ameaçando pessoas", next: 100 },
+                        { text: "Animal solto ameaçando pessoas", next: 100 },
+                        { text: "Animal não está ameaçando pessoas", next: 93 }
+                    ]
+                },
+
+                // Perigo Iminente (nós de 40 a 47)
+                40: {
+                    question: "Qual o Tipo de Risco Iminente?",
+                    guidance: "<strong>Grupo P: Prevenção e Vistoria (Risco Iminente):</strong> Este grupo abrange situações em que o perigo ainda não se concretizou, mas há um risco iminente de ocorrência. As principais demandas incluem riscos de queda de árvores, enxames de insetos agressivos e riscos de desabamentos/desmoronamentos. A classificação correta é fundamental para o despacho adequado. <br> <br><strong>Pergunte ao solicitante para classificar o risco:</strong><ul><li>É uma árvore que ameaça cair?</li><li>São insetos (abelhas, marimbondos) que estão agressivos ou em local de risco?</li><li>É uma estrutura (muro, prédio, telhado) que parece que vai desabar?</li><li>É um deslizamento de terra ou um muro que está cedendo?</li><li>Há fios elétricos caídos e energizados?</li><li>É alguma outra situação que representa perigo imediato, mas não se encaixa nas categorias anteriores?</li></ul>",
+                    options: [
+                        { text: "Árvore com Risco de Queda", next: 41 },
+                        { text: "Insetos Agressivos (Abelhas, Marimbondos)", next: 42 },
+                        { text: "Estrutura com Risco de Desabamento", next: 43 },
+                        { text: "Deslizamento de Terra / Muro com Risco", next: 44 },
+                        { text: "Fios Energizados Caídos", next: 45 },
+                        { text: "Outra Situação Perigosa", next: 46 }
+                    ]
+                },
+                41: {
+                    question: "A árvore está inclinada, com galhos soltos ou ameaçando cair sobre algo?",
+                    guidance: "<strong>Árvore com Risco de Queda:</strong> O Corpo de Bombeiros atua em situações de risco iminente à vida e ao patrimônio, ou quando a árvore caída impede a mobilidade urbana. Não realizamos podas ornamentais. A triagem é vital para evitar deslocamentos desnecessários, especialmente em períodos chuvosos. <br> <br><strong>Perguntas Essenciais para Avaliação:</strong><ul><li>A árvore está visivelmente inclinada ou com galhos prestes a cair?</li><li>Há rachaduras no tronco, raízes expostas, ou sinais de doença na árvore?</li><li>Ela está tocando a fiação elétrica, uma estrutura (casa, muro) ou veículo?</li><li>Onde a árvore está localizada (via pública, quintal particular, área comum)?</li><li>Há pedestres, veículos ou edificações diretamente abaixo ou muito próximos à árvore?</li><li>O terreno ao redor está instável (ex: encharcado, com erosão)?</li><li>Houve alguma vistoria anterior ou tentativa de remoção?</li></ul><br><strong>Orientação (se for propriedade particular sem risco iminente):</strong> Oriente o solicitante a contatar um profissional particular ou a prefeitura.",
+                    options: [
+                        { text: "Árvore com risco aparente de queda", next: 47 },
+                        { text: "Árvore tombada sobre veículo", next: 47 },
+                        { text: "Árvore tombada sobre edificação", next: 47 },
+                        { text: "Solicitação de poda ou avaliação", next: 93 }
+                    ]
+                },
+                42: {
+                    question: "O enxame atacou alguém ou está em local de risco (escola, hospital, abrigo)?",
+                    guidance: "<strong>Enxame de Insetos Agressivos:</strong> O Corpo de Bombeiros atua na remoção segura de enxames de insetos agressivos (abelhas, marimbondos, vespas) que representem risco à população. A prioridade é a segurança, e a remoção ocorre, preferencialmente, em horários de menor movimentação. Lembre-se que algumas espécies são protegidas e o manejo deve ser feito por apicultores. <br> <br><strong>Perguntas Essenciais para Avaliação:</strong><ul><li>Qual o tipo de inseto? (É importante diferenciar abelhas, marimbondos, vespas)</li><li>O enxame está agressivo? Já atacou alguém? Há pessoas alérgicas próximas?</li><li>Onde o enxame está localizado (ex: em via pública, residência, caixa de energia, poste, muro, árvore)?</li><li>Há risco de o enxame se deslocar para uma área de maior circulação?</li><li>Há crianças, idosos ou pessoas com deficiência nas proximidades?</li></ul><br><strong>Orientação:</strong> Se não houver risco iminente ou se for uma espécie protegida, oriente o solicitante a buscar um apicultor ou órgão ambiental.",
+                    options: [
+                        { text: "Enxame atacando pessoas", next: 100 },
+                        { text: "Enxame em local de risco", next: 47 },
+                        { text: "Enxame não está atacando", next: 93 }
+                    ]
+                },
+                43: {
+                    question: "A estrutura apresenta rachaduras, inclinação ou já cedeu parcialmente?",
+                    guidance: "<strong>Estrutura com Risco de Desabamento:</strong> O acionamento de equipes de bombeiros para risco de desabamento considera sinais visíveis de comprometimento da estrutura (rachaduras, inclinação, estalos), desmoronamento parcial, e, principalmente, a presença de vítimas ou risco iminente à população. <br> <br><strong>Perguntas Essenciais para Avaliação:</strong><ul><li>Qual o tipo de estrutura que apresenta risco (ex: muro, telhado, varanda, laje, prédio inteiro)?</li><li>Há trincas grandes, rachaduras, inclinação visível, ou partes da estrutura já caíram?</li><li>A estrutura está emitindo algum som estranho (ex: estalos, rangidos)?</li><li>Há pessoas dentro ou muito próximas à estrutura?</li><li>O local é habitado ou desocupado?</li><li>Há risco de o desabamento afetar estruturas vizinhas ou vias públicas?</li></ul>",
+                    options: [
+                        { text: "Estrutura em risco de colapso", next: 47 },
+                        { text: "Estrutura cedeu parcialmente", next: 47 },
+                        { text: "Estrutura parece estável", next: 100 },
+                        { text: "Solicitante não sabe informar", next: 100 }
+                    ]
+                },
+                44: {
+                    question: "Há trincas, escorregamento de terra ou sinais de que o solo está cedendo?",
+                    guidance: "<strong>Deslizamento de Encostas e Taludes:</strong> A ocorrência de deslizamentos, mesmo que parciais, representa um risco significativo à vida e ao patrimônio. A avaliação rápida da situação é crucial. <br> <br><strong>Perguntas Essenciais para Avaliação:</strong><ul><li>O barranco ou encosta apresenta rachaduras, trincas, escorrimento de terra ou água?</li><li>Há árvores ou postes inclinados no local?</li><li>O deslizamento está próximo a casas, ruas ou veículos? Qual a distância?</li><li>Há pessoas no local ou em risco de serem atingidas?</li><li>Qual o tamanho aproximado da área que deslizou ou que está em risco?</li><li>Está chovendo no momento ou choveu intensamente nas últimas horas?</li></ul>",
+                    options: [
+                        { text: "Terreno está deslocando", next: 47 },
+                        { text: "Muro ou parte caiu", next: 47 },
+                        { text: "Parte do terreno deslocou", next: 47 },
+                        { text: "Solicitante não sabe informar", next: 100 }
+                    ]
+                },
+                45: {
+                    question: "Os fios estão em contato com pessoas, estruturas ou água?",
+                    guidance: "<strong>Fios Energizados Caídos:</strong> Esta é uma situação de <strong>altíssimo risco</strong> de choque elétrico e incêndio, exigindo o imediato isolamento da área e o acionamento urgente da concessionária de energia (CEMIG). <br> <br><strong>Ações Essenciais e Perguntas:</strong><ul><li><strong>Prioridade:</strong> Oriente o solicitante a manter distância de qualquer fio caído e a impedir que outras pessoas ou animais se aproximem.</li><li>Onde exatamente os fios caíram? (Ex: na rua, em cima de um veículo, em um telhado, no quintal?)</li><li>Os fios estão em contato com água, objetos metálicos, veículos ou alguma estrutura?</li><li>Há pessoas ou animais próximos ou em contato com os fios?</li><li>A CEMIG já foi acionada? Se sim, qual o número do protocolo de atendimento?</li><li>Há risco de incêndio devido aos fios?</li></ul>",
+                    options: [
+                        { text: "Existe risco direto ou contato com pessoas/objetos", next: 47 },
+                        { text: "Fios isolados ou rompidos, sem energia", next: 100 }
+                    ]
+                },
+                46: {
+                    question: "A situação representa risco imediato à integridade física de alguém?",
+                    guidance: "<strong>Outras Situações de Risco Iminente:</strong> Este bloco é para ocorrências diversas que representam perigo iminente, mas que não se enquadram nas categorias específicas anteriores. É fundamental coletar o máximo de detalhes possível para avaliar a necessidade de intervenção do Corpo de Bombeiros. <br> <br><strong>Perguntas Essenciais para Compreender a Situação:</strong><ul><li><strong>Descreva a situação:</strong> O que exatamente está acontecendo? Qual o tipo de perigo?</li><li><strong>Localização:</strong> Onde está ocorrendo essa situação perigosa? Há pontos de referência?</li><li><strong>Vítimas/Pessoas em Perigo:</strong> Há vítimas ou pessoas em perigo imediato devido a essa situação? Quantas? Qual a condição delas?</li><li><strong>Potencial de Dano:</strong> Qual o risco de agravamento da situação? Pode causar feridos, danos materiais significativos ou afetar uma área maior?</li><li><strong>Causa:</strong> Se souber, o que causou essa situação?</li><li><strong>Ações Tomadas:</strong> Alguém já tentou resolver ou intervir?</li></ul>",
+                    options: [
+                        { text: "Risco direto ou indireto claro", next: 47 },
+                        { text: "Situação de incômodo ou dúvida", next: 100 }
+                    ]
+                },
+                47: {
+                    question: "Há pessoas feridas ou em perigo imediato?",
+                    guidance: "<strong>Avaliação de Risco à Vida (Prioridade Máxima):</strong> Esta é uma situação crítica que exige ação imediata. <br> <br><strong>Perguntas Essenciais para o Repasse:</strong><ul><li>Quantas pessoas estão envolvidas?</li><li>Qual a condição aparente dessas pessoas (conscientes, presas, feridas, etc.)?</li><li>Qual o tipo de perigo imediato (queda, ataque, etc.)?</li></ul><br><strong>Ação:</strong><ul><li>Crie a chamada,  coloque o <i>Alerta de chamada</i> e classifique a natureza como de <i>Alta</i> prioridade.</li><li>Repasse a chamada <strong>imediatamente</strong> ao Supervisor BM de Teleatendimento, fornecendo todas as informações detalhadas coletadas.</li></ul>",
+                    options: [
+                        { text: "Existem Pessoas feridas", next: 100 },
+                        { text: "Existem Pessoas em perigo imediato", next: 100 },
+                        { text: "Sem pessoas feridas ou em perigo", next: 100 },
+                        { text: "Solicitante não sabe informar", next: 93 }
+                    ]
+                },
+
+                // Instruções e Conclusões de chamadas por natureza
+                90: {
+                    question: "Instruções de Segurança Imediata",
+                    guidance: "<strong>Para Incêndios com Pessoas em Risco:</strong> É crucial orientar o solicitante e pedir que ele ajude a orientar outras pessoas presentes no local até a chegada das equipes de resgate. <br> <br><strong>Instruções Essenciais para Segurança:</strong><ul><li><strong>Mantenha-se baixo:</strong> Próximo ao chão, onde a fumaça é menos densa e o ar é mais respirável.</li><li><strong>Proteja as vias aéreas:</strong> Se possível, molhe uma toalha ou pedaço de pano e cubra o nariz e a boca.</li><li><strong>Verifique portas:</strong> Não abra portas que estejam quentes ao toque. Use as costas da mão para verificar.</li><li><strong>Sinalize:</strong> Se não conseguir sair, sinalize sua localização na janela para que as equipes possam vê-lo.</li><li><strong>Evite elevadores:</strong> Nunca utilize elevadores em caso de incêndio; use as escadas.</li><li><strong>Mantenha a calma:</strong> Tente acalmar as pessoas ao seu redor e siga as instruções.</li></ul><br><strong>Ação:</strong> Após fornecer estas instruções, proceda com o registro detalhado no sistema CAD.",
+                    options: [] // Não há mais opções, o fluxo termina aqui
+                },
+                91: {
+                    question: "Instruções para Situações Críticas",
+                    guidance: "<strong>Para Vazamento de Gás:</strong> É fundamental orientar o solicitante e pedir que ele ajude a orientar outras pessoas presentes no local sobre as ações de segurança imediatas até a chegada das equipes. <br> <br><strong>Instruções Essenciais para Vazamento de Gás:</strong><ul><li><strong>Evacue imediatamente:</strong> Saia do local o mais rápido possível e afaste-se da edificação.</li><li><strong>Não utilize fontes de ignição: NÃO</strong> acenda fósforos, isqueiros, nem utilize equipamentos elétricos (celulares, lanternas).</li><li><strong>Não manipule a eletricidade: NÃO<strong> ligue ou desligue interruptores, tomadas ou qualquer aparelho elétrico.</li><li><strong>Busque um local seguro:</strong> Dirija-se a uma área aberta e ventilada, longe do cheiro de gás.</li><li><strong>Impeça o acesso:</strong> Oriente outras pessoas a não se aproximarem do local do vazamento.</li><li><strong>Feche o registro de gás:</strong> Se for seguro e souber como, feche o registro geral de gás.</li></ul><br><strong>Ação:</strong> Após fornecer estas instruções, proceda com o registro detalhado no sistema CAD.",
+                    options: [] // Não há mais opções, o fluxo termina aqui
+                },
+                92: {
+                    question: "Instruções para locais de difícil acesso",
+                    guidance: "<strong>Locais de acesso restrito:</strong> É fundamental orientar o solicitante a informar rotas alternativas para a chegada das equipes. <br> <br><strong>Perguntas Essenciais:</strong><ul><li>Existe rota alternativa ou ponto onde passa o caminhão?</li><li>Existem obstáculos? (ex.: beco, ponte, poste, portão fechado)</li></ul><br><strong>Orientação:</strong> Oriente o Solicitante a colocar uma pessoa na entrada para sinalizar.",
+                    options: [] // Não há mais opções, o fluxo termina aqui
+                },
+                93: {
+                    question: "Instruções sobre coleta de dados",
+                    guidance: "<strong>Coleta das informações:</strong> É fundamental obter do solicitante o máximo de informações para auxiliar as equipes. <br> <br><strong>Orientações finais:</strong><ul><li>Reforce orientações de segurança.</li><li>Informe que a ocorrência será atendida conforme prioridade.</li></ul><br><strong>Orientação:</strong> Oriente o Solicitante a manter o telefone livre e local acessível.",
+                    options: [] // Não há mais opções, o fluxo termina aqui
+                },
+
+                // Nó Final do Fluxo: Avaliação e Registro
+                100: {
+                    question: "Critérios para acionamento do Supervisor",
+                    guidance: "<strong>Acionamento Obrigatório</strong><ul><li>Parada cardiorrespiratória, obstrução de vias aéreas</li><li>Qualquer ocorrência de PRIORIDADE</li><li>Material perigoso com múltiplas vítimas</li><li>Incêndio em edificação de alto risco (hospital, escola, shopping)</li><li>Solicitação de apoio de múltiplas corporações</li><li>Chamadas com informações conflitantes ou confusas</li></ul> <br><strong>Acionamento Recomendado</strong><ul><li>Grande quantidade de rechamadas ou duplicadas</li><li>Incêndio florestal com mais de 2 hectares</li><li>Qualquer situação que o teleatendente julgue atípica</li><li>Chamadas de autoridades públicas</li></ul> <br>Todos os dados essenciais foram coletados. Proceda com o registro detalhado no sistema CAD.",
+                    options: [] // Não há mais opções, o fluxo termina aqui
+                }
+            }
+        };
+
+
+        // Seção de Funções de Inicialização e Navegação do Menu
+        // Estas funções gerenciam o carregamento inicial da aplicação e a interação com o menu lateral.
+        function initApp() {
+            loadNode(1); // Carrega o primeiro nó da árvore de decisão
+            appData.history.push(1); // Adiciona o nó inicial ao histórico
+            setupMenuListeners(); // Configura os listeners para os itens do menu
+        }
+
+        function setupMenuListeners() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove a classe 'active' de todos os links e adiciona ao clicado
+                    document.querySelectorAll('.nav-link').forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Oculta todos os conteúdos dinâmicos e mostra apenas o correspondente
+                    const target = this.getAttribute('data-target');
+                    document.querySelectorAll('.dynamic-content').forEach(c => c.style.display = 'none');
+                    document.getElementById(target).style.display = 'block';
+                    
+                    // Lógica específica para diferentes seções do menu
+                    if (target === 'busca-samu') {
+                        clearSamuSearch(); // Limpa a pesquisa de municípios SAMU ao navegar para a seção
+                    } else if (target === 'triagem') {
+                        // Reinicia a árvore de decisão ao voltar para a triagem
+                        appData.history = []; // Limpa o histórico
+                        appData.pathHistory = []; // Limpa o caminho de decisão
+                        document.getElementById('notes-area').value = ''; // Limpa as anotações
+                        loadNode(1); // Recarrega o nó inicial
+                        appData.history.push(1); // Adiciona o nó inicial ao histórico novamente
+                    } else if (target === 'saved-calls') {
+                        loadSavedCalls(); // Recarrega a lista de chamadas salvas
+                    }
+                });
+            });
+        }
+
+        // Seção de Funções da Árvore de Decisão
+        // Responsáveis por carregar os nós da árvore, exibir perguntas, opções e orientações.
+        function loadNode(nodeId) { 
+            const node = appData.treeData[nodeId];
+            if (!node) return; // Garante que o nó existe
+
+            const triagemContent = document.getElementById('triagem');
+            // Verifica se a seção de triagem está visível antes de carregar o nó
+            const isTriagemVisible = window.getComputedStyle(triagemContent).display !== 'none';
+
+            if (isTriagemVisible) {
+                document.getElementById('question').textContent = node.question;
+                const guidanceElement = document.getElementById('guidance');
+                
+                // Exibe ou oculta a orientação com base na existência de conteúdo
+                if (node.guidance) {
+                    // Removida a chamada à função formatGuidanceText
+                    guidanceElement.innerHTML = `<p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                                             <p>${node.guidance.replace(/\n/g, '<br>')}</p>`;
+                    guidanceElement.style.display = 'block';
+                } else {
+                    guidanceElement.style.display = 'none';
+                }
+
+                const optionsElement = document.getElementById('options');
+                optionsElement.innerHTML = ''; // Limpa as opções anteriores
+
+                // Renderiza os botões de opção se existirem
+                if (node.options && node.options.length > 0) {
+                    node.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.className = 'btn btn-primary option-btn m-2';
+                        button.innerHTML = `<i class="bi bi-arrow-right-circle"></i> ${option.text}`;
+                        button.onclick = () => {
+                            const notesArea = document.getElementById('notes-area');
+                            let formattedAnswer = option.text;
+                            let categoryPrefix = '';
+
+                            // Adiciona prefixo SIT: ou VIT: com base no ID do nó
+                            // Isso categoriza a resposta para o resumo
+                            if ([20, 21, 22, 23, 24].includes(nodeId)) { // IDs relacionados a vítima (APH)
+                                categoryPrefix = 'VIT: ';
+                            } else {
+                                categoryPrefix = 'SIT: ';
+                            }
+
+                            formattedAnswer = categoryPrefix + option.text;
+
+                            notesArea.value += `${formattedAnswer}\n\n`;
+
+                            // Registra no histórico de caminho para o resumo final
+                            appData.pathHistory.push({
+                                question: node.question,
+                                answer: formattedAnswer,
+                                guidance: node.guidance
+                            });
+                            
+                            appData.history.push(option.next); // Adiciona o PRÓXIMO nó ao histórico de navegação
+                            
+                            loadNode(option.next); // Carrega o próximo nó
+                        };
+                        optionsElement.appendChild(button);
+                    });
+                    document.getElementById('history-panel').style.display = 'none'; // Oculta o painel de histórico durante a navegação
+                } else {
+                    // Quando não há mais opções (fim do fluxo), mostra o resumo e o botão de recomeçar
+                    showHistory();
+                    document.getElementById('history-panel').style.display = 'block';
+                    
+                    const restartButton = document.createElement('button');
+                    restartButton.className = 'btn btn-success option-btn';
+                    restartButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Recomeçar';
+                    restartButton.onclick = () => {
+                        appData.history = []; // Limpa o histórico
+                        appData.pathHistory = []; // Limpa o caminho de decisão
+                        document.getElementById('notes-area').value = ''; // Limpa as anotações
+                        loadNode(1); // Recomeça do nó inicial
+                        appData.history.push(1); // Adiciona o nó inicial ao histórico novamente
+                    };
+                    optionsElement.appendChild(restartButton);
+                }
+
+                // Gerencia a visibilidade e funcionalidade do botão "Voltar"
+                const backButton = document.getElementById('back-btn');
+                // Altera a condição: só mostra o botão "Voltar" se houver mais de um nó no histórico (para retroceder para o nó anterior)
+                if (appData.history.length > 1) { 
+                    backButton.classList.remove('d-none');
+                    backButton.onclick = () => {
+                        // Remove o NÓ ATUAL do histórico (o nó de onde estamos voltando)
+                        appData.history.pop();
+                        // Remove a última decisão do caminho para manter a consistência com o nó que será carregado
+                        appData.pathHistory.pop();
+
+                        // Pega o ID do NÓ ANTERIOR na pilha de histórico
+                        const prevNodeId = appData.history[appData.history.length - 1];
+                        
+                        // Reconstrói a área de anotações com base no pathHistory atual para exibir corretamente
+                        let tempNotes = '';
+                        appData.pathHistory.forEach(step => {
+                            tempNotes += `${step.answer}\n\n`;
+                        });
+                        document.getElementById('notes-area').value = tempNotes;
+                        
+                        loadNode(prevNodeId); // Carrega o nó anterior (NÃO adiciona ao histórico aqui, pois já foi feito o pop)
+                    };
+                } else {
+                    backButton.classList.add('d-none'); // Oculta o botão de voltar no início ou se não houver para onde voltar
+                }
+            }
+        }
+
+        // Seção de Funções de Resumo e Salvamento
+        // Funções para exibir o histórico da triagem, gerar o resumo final, copiar e salvar chamadas.
+        function showHistory() {
+            const historyContent = document.getElementById('history-content');
+            historyContent.innerHTML = ''; // Limpa o conteúdo anterior
+            
+            const summaryContainer = document.createElement('div');
+            summaryContainer.className = 'summary-container';
+            
+            // Popula o histórico de caminho percorrido
+            appData.pathHistory.forEach((step, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'summary-item';
+                
+                const questionSpan = document.createElement('span');
+                questionSpan.className = 'summary-question';
+                questionSpan.textContent = `${index + 1}. ${step.question}`;
+                
+                const answerSpan = document.createElement('span');
+                answerSpan.className = 'summary-answer';
+                answerSpan.textContent = `↳ ${step.answer}`; // Exibe a resposta formatada
+                
+                itemDiv.appendChild(questionSpan);
+                itemDiv.appendChild(answerSpan);
+                summaryContainer.appendChild(itemDiv);
+            });
+            
+            const notesContent = document.getElementById('notes-area').value;
+            const finalSummaryText = gerarResumoFinal(appData.pathHistory, notesContent);
+
+            const finalDiv = document.createElement('div');
+            finalDiv.className = 'mt-3 p-3 bg-light rounded';
+            finalDiv.innerHTML = `
+                <h5 class="text-primary"><i class="bi bi-check-circle"></i> Histórico da Triagem</h5>
+                <pre class="text-muted" id="final-summary-text">${finalSummaryText}</pre>
+            `;
+            
+            summaryContainer.appendChild(finalDiv);
+            historyContent.appendChild(summaryContainer);
+            
+            // Configura o botão de copiar resumo
+            document.getElementById('copy-btn').onclick = async () => {
+                try {
+                    let summaryToCopy = "=== RESUMO DA NAVEGAÇÃO ===\n\n";
+        
+                    appData.pathHistory.forEach((step, index) => {
+                        summaryToCopy += `${index + 1}. ${step.question}\n`;
+                        summaryToCopy += `   ↳ ${step.answer}\n\n`;
+                    });
+        
+                    summaryToCopy += document.getElementById('final-summary-text').textContent;
+        
+                    // Usa document.execCommand('copy') para compatibilidade com iframes
+                    const textArea = document.createElement('textarea');
+                    textArea.value = summaryToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+
+                    const copyMessage = document.getElementById('copy-message');
+                    copyMessage.style.display = 'inline';
+                    setTimeout(() => copyMessage.style.display = 'none', 2000);
+                } catch (err) {
+                    console.error('Falha ao copiar texto: ', err);
+                    showCustomAlert('Não foi possível copiar o resumo. Por favor, tente novamente.');
+                }
+            };
+
+            // Configura o botão de salvar chamada
+            document.getElementById('save-call-btn').onclick = saveCall;
+        }
+
+        function gerarResumoFinal(pathHistory, notesContent) {
+            let resumo = "=== HISTÓRICO DA TRIAGEM ===\n\n";
+
+            let allSIT = [];
+            let allVIT = [];
+            let allREF = [];
+            let allTAC = [];
+
+            // Coleta entradas SIT e VIT do pathHistory (prefixadas por loadNode)
+            pathHistory.forEach(step => {
+                if (step.answer.startsWith('SIT:')) {
+                    allSIT.push(step.answer.substring(4).trim());
+                } else if (step.answer.startsWith('VIT:')) {
+                    allVIT.push(step.answer.substring(4).trim());
+                }
+            });
+
+            // Coleta entradas REF e TAC do notesContent (digitadas manualmente pelo usuário)
+            const refLines = notesContent.match(/^REF:\s*(.*)$/gim);
+            if (refLines) {
+                refLines.forEach(line => {
+                    allREF.push(line.replace(/^REF:\s*/i, '').trim());
+                });
+            }
+            const tacLines = notesContent.match(/^TAC:\s*(.*)$/gim);
+            if (tacLines) {
+                tacLines.forEach(line => {
+                    allTAC.push(line.replace(/^TAC:\s*/i, '').trim());
+                });
+            }
+
+            // Concatena as informações coletadas para o resumo final
+            resumo += `SIT: ${allSIT.length > 0 ? allSIT.join('; ') : 'Não informado.'}\n`;
+            resumo += `VIT: ${allVIT.length > 0 ? allVIT.join('; ') : 'Não informado.'}\n`;
+            resumo += `REF: ${allREF.length > 0 ? allREF.join('; ') : 'Não informado.'}\n`;
+            resumo += `TAC: ${allTAC.length > 0 ? allTAC.join('; ') : 'Não informado.'}\n\n`;
+
+            return resumo;
+        }
+
+        function saveCall() {
+            const notes = document.getElementById('notes-area').value;
+            // O resumo final é gerado no momento de salvar, usando o conteúdo atual das anotações
+            const summary = gerarResumoFinal(appData.pathHistory, notes); 
+
+            // Obtém as chamadas existentes ou inicializa um array vazio do LocalStorage
+            let savedCalls = JSON.parse(localStorage.getItem('teleatendimento_saved_calls')) || [];
+
+            // Cria um objeto com os dados da chamada
+            const callData = {
+                id: Date.now(), // ID único baseado no timestamp
+                timestamp: new Date().toISOString(), // Data e hora atual em formato ISO
+                decisionPath: appData.pathHistory, // Caminho de decisão percorrido
+                notes: notes, // Anotações do teleatendente
+                summary: summary // Resumo final gerado
+            };
+
+            savedCalls.push(callData); // Adiciona a nova chamada à lista
+
+            try {
+                // Salva a lista atualizada no LocalStorage
+                localStorage.setItem('teleatendimento_saved_calls', JSON.stringify(savedCalls));
+                console.log("Chamada salva no LocalStorage.");
+                const saveMessage = document.getElementById('save-message');
+                saveMessage.style.display = 'inline';
+                setTimeout(() => saveMessage.style.display = 'none', 2000); // Exibe mensagem de sucesso
+                
+                // Limpa o formulário após salvar para iniciar uma nova triagem
+                appData.history = [];
+                appData.pathHistory = [];
+                document.getElementById('notes-area').value = '';
+                loadNode(1);
+                appData.history.push(1); // Adiciona o nó inicial ao histórico novamente após o reset
+            } catch (e) {
+                console.error("Erro ao salvar a chamada no LocalStorage: ", e);
+                showCustomAlert("Erro ao salvar a chamada. Pode ser que o LocalStorage esteja cheio ou haja algum problema. Por favor, tente novamente.");
+            }
+        }
+
+        // Seção de Funções de Gerenciamento de Chamadas Salvas
+        // Funções para carregar, exibir e detalhar chamadas salvas no LocalStorage.
+        function loadSavedCalls() {
+            const savedCallsList = document.getElementById('saved-calls-list');
+            if (!savedCallsList) {
+                console.error("Element 'saved-calls-list' not found in loadSavedCalls!");
+                showCustomAlert("Erro interno: A lista de chamadas salvas não pôde ser carregada. Por favor, tente novamente.");
+                return; // Sai para evitar o erro
+            }
+            savedCallsList.innerHTML = '<p class="text-muted">Carregando chamadas...</p>'; // Mensagem de carregamento
+
+            let savedCalls = JSON.parse(localStorage.getItem('teleatendimento_saved_calls')) || [];
+
+            if (savedCalls.length === 0) {
+                savedCallsList.innerHTML = '<p class="text-muted">Nenhuma chamada salva ainda.</p>'; // Mensagem se não houver chamadas
+                return;
+            }
+
+            savedCallsList.innerHTML = ''; // Limpa a lista antes de adicionar os novos dados
+
+            // Ordena as chamadas da mais recente para a mais antiga
+            savedCalls.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            savedCalls.forEach((call) => {
+                const callDate = new Date(call.timestamp).toLocaleString();
+                // Previa do resumo, limitada a 100 caracteres
+                const callSummaryPreview = call.summary ? call.summary.substring(0, 100) + '...' : 'Sem resumo';
+
+                const callItem = document.createElement('div');
+                callItem.className = 'saved-call-item';
+                callItem.innerHTML = `
+                    <h6>Chamada Salva em: ${callDate}</h6>
+                    <small>${callSummaryPreview}</small>
+                `;
+                callItem.onclick = () => showSavedCallDetail(call.id, savedCalls); // Adiciona evento para ver detalhes
+                savedCallsList.appendChild(callItem);
+            });
+        }
+
+        function showSavedCallDetail(callId, allCalls) {
+            const callData = allCalls.find(call => call.id === callId);
+
+            if (!callData) {
+                showCustomAlert("Detalhes da chamada não encontrados.");
+                loadSavedCalls(); // Volta para a lista se não encontrar
+                return;
+            }
+
+            const savedCallsList = document.getElementById('saved-calls-list');
+            if (!savedCallsList) { // Adiciona verificação para evitar erro se null
+                console.error("Element 'saved-calls-list' not found in showSavedCallDetail!");
+                showCustomAlert("Erro interno: O detalhe da chamada salva não pôde ser exibido. Por favor, tente novamente.");
+                return;
+            }
+            savedCallsList.innerHTML = ''; // Limpa a lista para mostrar o detalhe
+
+            const detailDiv = document.createElement('div');
+            detailDiv.className = 'saved-call-detail';
+
+            // Monta o HTML para o caminho da decisão
+            let pathHtml = '<h5>Caminho da Decisão:</h5>';
+            callData.decisionPath.forEach((step, index) => {
+                pathHtml += `<p><strong>${index + 1}. ${step.question}</strong>: ${step.answer}</p>`;
+            });
+
+            detailDiv.innerHTML = `
+                <h4>Detalhes da Chamada Salva</h4>
+                <p><strong>ID da Chamada:</strong> ${callData.id}</p>
+                <p><strong>Data/Hora:</strong> ${new Date(callData.timestamp).toLocaleString()}</p>
+                ${pathHtml}
+                <h5>Anotações:</h5>
+                <pre>${callData.notes || 'Nenhuma anotação.'}</pre>
+                <h5>Resumo Final:</h5>
+                <pre>${callData.summary || 'Nenhum resumo.'}</pre>
+                <button class="btn btn-secondary mt-3" onclick="loadSavedCalls()">Voltar para a Lista</button>
+            `;
+            savedCallsList.appendChild(detailDiv);
+        }
+
+        // Seção de Funções de Consulta SAMU
+        // Funções para pesquisar municípios na base de dados do SAMU.
+        function clearSamuSearch() {
+            const input = document.getElementById("municipioInput");
+            const resultDiv = document.getElementById("samu-result");
+            
+            if (input) input.value = "";
+            if (resultDiv) resultDiv.innerHTML = "";
+        }
+
+        function pesquisarMunicipio() {
+            const input = document.getElementById("municipioInput").value.trim();
+            const resultDiv = document.getElementById("samu-result");
+            
+            if (!input || input.length < 3) {
+                resultDiv.innerHTML = "<p class='text-danger'>Por favor, digite pelo menos 3 caracteres para pesquisar.</p>";
+                return;
+            }
+
+            // Normaliza o input para ignorar acentos e maiúsculas/minúsculas
+            const normalizedInput = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            
+            let resultados = [];
+            
+            // Itera sobre os grupos SAMU para encontrar municípios correspondentes
+            for (const [grupo, municipios] of Object.entries(appData.gruposSamu)) {
+                const municipiosEncontrados = municipios.filter(m => 
+                    m.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(normalizedInput)
+                );
+                
+                if (municipiosEncontrados.length > 0) {
+                    resultados.push({
+                        grupo: grupo,
+                        municipios: municipiosEncontrados
+                    });
+                }
+            }
+
+            // Exibe os resultados da pesquisa
+            if (resultados.length === 0) {
+                resultDiv.innerHTML = `<p>Nenhum município encontrado com "<span class="highlight">${input}</span>".</p>
+                            <p><i class="bi bi-info-circle-fill guidance-icon"></i><strong>Orientações:</strong></p>
+                            <p>Tranfira a ligação para o Supervisor BM de Teleatendimento.</p>`;
+            } else {
+                let htmlResultados = `<p>Resultados para "<span class="highlight">${input}</span>":</p>`;
+                
+                resultados.forEach(resultado => {
+                    htmlResultados += `
+                        <div class="result-item">
+                            <p>Municípios correspondentes ao <strong>${resultado.grupo}</strong>:</p>
+                            <ul>
+                                ${resultado.municipios.map(m => `<li>${m}</li>`).join("")}
+                            </ul>
+                        </div>
+                    `;
+                });
+
+                resultDiv.innerHTML = htmlResultados;
+            }
+        }
+
+        // Seção de Funções de Utilidade (Alertas Personalizados)
+        // Substitui a função alert() nativa do navegador por um modal personalizado.
+        function showCustomAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+                padding: 15px;
+                border-radius: 5px;
+                z-index: 1000;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                text-align: center;
+            `;
+            alertDiv.innerHTML = `<p>${message}</p><button class="btn btn-danger mt-2" onclick="this.parentNode.remove()">Fechar</button>`;
+            document.body.appendChild(alertDiv);
+        }
+
+        // Seção de Event Listeners
+        // Configura os ouvintes de eventos para interações do usuário.
+        document.getElementById("municipioInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                pesquisarMunicipio(); // Pesquisa o município ao pressionar Enter no campo de busca SAMU
+            }
+        });
+
+        // Inicializa a aplicação quando o DOM estiver completamente carregado
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+
+</html>
