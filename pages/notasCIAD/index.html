@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Bloco de Nota CIAD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS principal -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- LOGO COM LINK -->
+    <a href="..\..\index.html" class="logo-link" title="Voltar para a página inicial">
+      <img src="logo.png" id="sisp-logo" alt="Bloco de Nota CIAD">
+    </a>
+
+    <!-- NOME DO SISTEMA -->
+    <h2>Bloco de Nota CIAD</h2>
+
+    <!-- SCRIPTS RÁPIDOS -->
+    <p class="section-title">Scripts Rápidos</p>
+
+    <button onclick="inserirTexto('Olá, bom dia/tarde. Falo com o Sr(a). ')">
+      Início Padrão
+    </button>
+
+    <button onclick="inserirTexto('Por motivos de segurança, poderia confirmar seus dados? ')">
+      Confirmação de Dados
+    </button>
+
+    <button onclick="inserirTexto('Peço que aguarde um momento enquanto verifico. ')">
+      Colocar em Espera
+    </button>
+
+    <button onclick="inserirTexto('O número do seu protocolo é ')">
+      Fim com Protocolo
+    </button>
+
+    <button onclick="inserirTexto('Não houve resposta do cliente. Atendimento encerrado. ')">
+      Sem Resposta
+    </button>
+
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="content">
+
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+      <button onclick="limpar()">Limpar</button>
+      <button onclick="copiar()">Copiar</button>
+    </div>
+
+    <!-- EDITOR -->
+    <textarea
+      id="editor"
+      placeholder="Digite ou utilize os scripts ao lado para montar seu rascunho..."
+      oninput="atualizarContador()"
+    ></textarea>
+
+    <!-- STATUS -->
+    <div class="status-bar">
+      <span id="contador">0 caracteres • 0 palavras</span>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- JavaScript -->
+<script src="script.js"></script>
+
+</body>
+</html>
+
+
